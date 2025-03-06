@@ -8,7 +8,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(''); 
 
-  const url = process.env.REACT_APP_API_URL;
+  const url = import.meta.env.VITE_API_URL;
 
   const handleIINChange = (e) => {
     const input = e.target.value.toLowerCase();

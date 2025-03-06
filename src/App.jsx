@@ -9,6 +9,7 @@ import AdminHome from './pages/AdminHome'
 import AdminPage from './pages/AdminPage'
 import AdminPublications from './pages/AdminPublications'
 import UserProfile from './pages/UserProfile'
+import PublicationsPage from './pages/PublicationsPage'
 import Navbar from './components/Navbar'
 import ErrorMessage from './components/ErrorMessage'
 import RootLayout from './layouts/RootLayout'
@@ -19,7 +20,7 @@ function App() {
   return (
     <Router>
       <RootLayout>
-        <Navbar />
+        {/* <Navbar /> */}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -27,6 +28,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/resume" element={<UserResume />} />
           <Route path="/home-user" element={<UserHome />} />
+          <Route path="/publications" element={<PublicationsPage />} />
           <Route path="/home-admin" element={<AdminHome />} />
           <Route path="/admin-users" element={<AdminPage />} />
           <Route path="/admin-publications" element={<AdminPublications />} />

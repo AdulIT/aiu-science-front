@@ -21,7 +21,7 @@ const PublicationsPage = () => {
   const [publications, setPublications] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const url = process.env.REACT_APP_API_URL;
+  const url = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     try {

@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const url = process.env.REACT_APP_API_URL;
+const url = import.meta.env.VITE_API_URL;
 
 if (!url) {
-  console.error('REACT_APP_API_URL не задан в окружении');
+  console.error('VITE_API_URL не задан в окружении');
 }
 
 export async function refreshAccessToken(navigate) {

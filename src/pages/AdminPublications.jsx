@@ -28,7 +28,7 @@ export default function AdminPublications() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [publications, setPublications] = useState([]);
-  const url = process.env.REACT_APP_API_URL;
+  const url = import.meta.env.VITE_API_URL
 
   useEffect(() => {
     const fetchData = async () => {

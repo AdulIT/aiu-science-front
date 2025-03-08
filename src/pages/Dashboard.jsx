@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { jwtDecode } from 'jwt-decode'
 import { makeAuthenticatedRequest } from '../services/api'
 import Navbar from '../components/Navbar'
-import { jwtDecode } from 'jwt-decode'
 
-export default function Dashboard() {
+export default function UserProfile() {
   const navigate = useNavigate()
   const { iin } = useParams()
   const [isLoading, setIsLoading] = useState(true)
@@ -23,7 +23,8 @@ export default function Dashboard() {
     higherSchool: '',
     role: '',
   })
-  const url = process.env.REACT_APP_API_URL
+
+  const url = import.meta.env.VITE_API_URL
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken')
@@ -33,11 +34,12 @@ export default function Dashboard() {
       return
     }
 
+    const decodedToken = jwtDecode(token)
+    const isAdmin = decodedToken.role === 'admin'
+    setIsAdmin(isAdmin)
+
     const fetchUserData = async () => {
       try {
-        const decodedToken = jwtDecode(token)
-        setIsAdmin(decodedToken.role === 'admin')
-
         const endpoint = isAdmin && iin
           ? `${url}/api/admin/user/${iin}`
           : `${url}/api/user/profile`
@@ -50,10 +52,10 @@ export default function Dashboard() {
           },
         }, navigate)
 
-        if (response.ok) {
-          const data = await response.json()
-          setUserData(data)
+        if (response.status === 200) {
+          setUserData(response.data)
         } else {
+          console.warn('Не удалось загрузить профиль пользователя')
           navigate('/login')
         }
       } catch (error) {
@@ -65,7 +67,70 @@ export default function Dashboard() {
     }
 
     fetchUserData()
-  }, [navigate, isAdmin, iin])
+  }, [navigate, iin])
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setUserData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleProfilePhotoChange = async (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      try {
+        const token = localStorage.getItem('accessToken')
+        const formData = new FormData()
+        formData.append('profilePhoto', file)
+
+        const response = await makeAuthenticatedRequest(`${url}/api/user/uploadPhoto`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }, navigate)
+
+        if (response.status === 200) {
+          setUserData((prev) => ({ ...prev, profilePhoto: response.data.profilePhoto }))
+          alert('Фотография успешно обновлена!')
+        } else {
+          alert('Ошибка при загрузке фотографии')
+        }
+      } catch (error) {
+        console.error('Ошибка при загрузке фотографии:', error)
+        alert('Произошла ошибка. Попробуйте позже.')
+      }
+    }
+  }
+
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem('accessToken')
+      if (!token) {
+        alert('Ошибка авторизации. Пожалуйста, войдите снова.')
+        return
+      }
+
+      const response = await makeAuthenticatedRequest(`${url}/api/user/update`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(userData),
+      }, navigate)
+
+      if (response.status === 200) {
+        alert('Информация успешно обновлена!')
+        setIsEditing(false)
+      } else {
+        alert('Ошибка при обновлении информации')
+      }
+    } catch (error) {
+      console.error('Ошибка при обновлении:', error)
+      alert('Произошла ошибка. Попробуйте позже.')
+    }
+  }
 
   if (isLoading) {
     return (
@@ -79,8 +144,78 @@ export default function Dashboard() {
     <>
       <Navbar role={isAdmin ? 'admin' : 'user'} />
       <div className="max-w-7xl mx-auto min-h-screen bg-gray-100 p-8">
-        <h1 className="text-2xl font-bold">Личный кабинет</h1>
-        <p className="mt-4">Информация о пользователе.</p>
+        <div className="flex flex-col items-center mb-6">
+          <div className="w-48 h-48 mb-4 rounded-full overflow-hidden border-4 border-gray-300">
+            <img
+              src={`${url}/public${userData.profilePhoto || '/default-profile.png'}`}
+              alt="Profile Photo"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          {isEditing && !isAdmin && (
+            <label className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+              Загрузить фото
+              <input type="file" onChange={handleProfilePhotoChange} className="hidden" />
+            </label>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+          {['fullName', 'scopusId', 'wosId', 'orcid', 'birthDate', 'phone', 'email', 'researchArea'].map((field) => (
+            <div key={field}>
+              <label className="block mb-1 font-medium text-gray-700">
+                {field === 'fullName' && 'ФИО'}
+                {field === 'scopusId' && 'Scopus Author ID'}
+                {field === 'wosId' && 'Web of Science ResearcherID'}
+                {field === 'orcid' && 'ORCID'}
+                {field === 'birthDate' && 'Дата рождения'}
+                {field === 'phone' && 'Телефон'}
+                {field === 'email' && 'Email'}
+                {field === 'researchArea' && 'Научные интересы'}
+              </label>
+              {isEditing && !isAdmin ? (
+                field === 'researchArea' ? (
+                  <textarea
+                    name={field}
+                    value={userData[field]}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                ) : (
+                  <input
+                    type={field === 'birthDate' ? 'date' : 'text'}
+                    name={field}
+                    value={userData[field]}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                )
+              ) : (
+                <p className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100">
+                  {userData[field] || 'Не указано'}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {!isAdmin && (
+          <button
+            onClick={() => setIsEditing((prev) => !prev)}
+            className="mt-6 py-2 px-4 text-white bg-yellow-600 rounded-lg hover:bg-yellow-700"
+          >
+            {isEditing ? 'Отменить' : 'Редактировать'}
+          </button>
+        )}
+
+        {isEditing && !isAdmin && (
+          <button
+            onClick={handleSave}
+            className="mt-4 py-2 px-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+          >
+            Сохранить изменения
+          </button>
+        )}
       </div>
     </>
   )

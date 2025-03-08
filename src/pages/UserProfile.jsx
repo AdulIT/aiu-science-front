@@ -19,7 +19,7 @@ export default function UserProfile() {
   const [publications, setPublications] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('profile')
-  const url = process.env.REACT_APP_API_URL
+  const url = import.meta.env.VITE_API_URL
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken')

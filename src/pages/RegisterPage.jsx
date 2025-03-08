@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { makeAuthenticatedRequest } from '../services/api';
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { makeAuthenticatedRequest } from '../services/api'
 
 const RegisterPage = () => {
-  const [iin, setIIN] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const navigate = useNavigate();
-  const url = process.env.REACT_APP_API_URL;
+  const [iin, setIIN] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const navigate = useNavigate()
+  const url = import.meta.env.VITE_API_URL
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (password !== confirmPassword) {
-      alert('Пароли не совпадают');
-      return;
+      alert('Пароли не совпадают')
+      return
     }
 
     try {
@@ -24,21 +24,21 @@ const RegisterPage = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ iin, password }),
-      });
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (response.ok) {
-        alert('Регистрация прошла успешно! Пожалуйста, войдите в систему.');
-        navigate('/login');
+        alert('Регистрация прошла успешно! Пожалуйста, войдите в систему.')
+        navigate('/login')
       } else {
-        alert(data.message);
+        alert(data.message)
       }
     } catch (error) {
-      console.error('Ошибка при регистрации:', error);
-      alert('Произошла ошибка. Попробуйте позже.');
+      console.error('Ошибка при регистрации:', error)
+      alert('Произошла ошибка. Попробуйте позже.')
     }
-  };
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -90,7 +90,7 @@ const RegisterPage = () => {
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default RegisterPage;
+export default RegisterPage

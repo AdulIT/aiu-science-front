@@ -16,7 +16,7 @@ export default function AdminHome() {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(true)
   const [statistics, setStatistics] = useState(null)
-  const url = process.env.REACT_APP_API_URL
+  const url = import.meta.env.VITE_API_URL
 
   useEffect(() => {
     const fetchStatistics = async () => {

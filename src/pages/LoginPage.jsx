@@ -1,37 +1,37 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { jwtDecode } from 'jwt-decode'
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const [iin, setIIN] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(''); 
+  const navigate = useNavigate()
+  const [iin, setIIN] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('') 
 
-  const url = import.meta.env.VITE_API_URL;
+  const url = import.meta.env.VITE_API_URL
 
   const handleIINChange = (e) => {
-    const input = e.target.value.toLowerCase();
-    const isNumeric = /^\d*$/.test(input); 
-    const isAllowedText = /^[admin]*$/.test(input);
+    const input = e.target.value.toLowerCase()
+    const isNumeric = /^\d*$/.test(input) 
+    const isAllowedText = /^[admin]*$/.test(input)
 
     if ((isNumeric && input.length <= 12) || isAllowedText) {
-      setIIN(input);
-      setError('');
+      setIIN(input)
+      setError('')
     } else {
-      setError('Логин должен состоять из цифр (12 символов).');
+      setError('Логин должен состоять из цифр (12 символов).')
     }
-  };
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const isNumeric = /^\d{12}$/.test(iin);
-    const isAdmin = iin === 'admin';
+    const isNumeric = /^\d{12}$/.test(iin)
+    const isAdmin = iin === 'admin'
 
     if (!isNumeric && !isAdmin) {
-      setError('Логин должен быть ровно 12 цифр');
-      return;
+      setError('Логин должен быть ровно 12 цифр')
+      return
     }
     
     try {
@@ -41,31 +41,31 @@ const LoginPage = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ iin, password }),
-      });
+      })
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Ошибка: ${errorData.message || 'Невозможно выполнить запрос'}`);
+        const errorData = await response.json()
+        throw new Error(`Ошибка: ${errorData.message || 'Невозможно выполнить запрос'}`)
       }
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (data.accessToken && data.refreshToken) {
-        localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken);
+        localStorage.setItem('accessToken', data.accessToken)
+        localStorage.setItem('refreshToken', data.refreshToken)
 
-        const decodedToken = jwtDecode(data.accessToken);
-        const userRole = decodedToken.role;
+        const decodedToken = jwtDecode(data.accessToken)
+        const userRole = decodedToken.role
 
-        navigate(userRole === 'admin' ? '/home-admin' : '/home-user');
+        navigate(userRole === 'admin' ? '/home-admin' : '/home-user')
       } else {
-        throw new Error('Токены не были получены');
+        throw new Error('Токены не были получены')
       }
     } catch (error) {
-      console.error('Error during login:', error.message);
-      alert(error.message || 'Произошла ошибка. Попробуйте позже.');
+      console.error('Error during login:', error.message)
+      alert(error.message || 'Произошла ошибка. Попробуйте позже.')
     }
-  };
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -108,7 +108,7 @@ const LoginPage = () => {
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage

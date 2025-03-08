@@ -1,29 +1,29 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
-import { makeAuthenticatedRequest } from '../services/api';
-import Navbar from '../components/Navbar';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { jwtDecode } from 'jwt-decode'
+import { makeAuthenticatedRequest } from '../services/api'
+import Navbar from '../components/Navbar'
+import { Link } from 'react-router-dom'
 
 export default function AdminPage() {
-  const navigate = useNavigate();
-  const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const url = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate()
+  const [users, setUsers] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const url = import.meta.env.VITE_API_URL
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('accessToken')
     if (!token) {
-      navigate('/login');
-      return;
+      navigate('/login')
+      return
     }
     
-    const decodedToken = jwtDecode(token);
-    const userRole = decodedToken.role;
+    const decodedToken = jwtDecode(token)
+    const userRole = decodedToken.role
     if (userRole !== 'admin') {
-      alert('Доступ запрещен: только для администраторов');
-      navigate('/home-user');
-      return;
+      alert('Доступ запрещен: только для администраторов')
+      navigate('/home-user')
+      return
     }
 
     makeAuthenticatedRequest(`${url}/api/admin/users`, {
@@ -36,22 +36,22 @@ export default function AdminPage() {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          setUsers(data.users);
+          setUsers(data.users)
         } else {
-          alert(data.message);
-          navigate('/login');
+          alert(data.message)
+          navigate('/login')
         }
       })
       .catch((error) => {
-        console.error('Ошибка при загрузке пользователей:', error);
+        console.error('Ошибка при загрузке пользователей:', error)
       })
       .finally(() => {
-        setIsLoading(false);
-      });
-  }, [navigate]);
+        setIsLoading(false)
+      })
+  }, [navigate])
 
   if (isLoading) {
-    return <p>Загрузка...</p>;
+    return <p>Загрузка...</p>
   }
 
   return (
@@ -85,5 +85,5 @@ export default function AdminPage() {
         </div>
       </div>
     </>
-  );
+  )
 }

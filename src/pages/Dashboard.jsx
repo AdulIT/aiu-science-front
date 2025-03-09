@@ -75,33 +75,42 @@ export default function UserProfile() {
   }
 
   const handleProfilePhotoChange = async (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      try {
-        const token = localStorage.getItem('accessToken')
-        const formData = new FormData()
-        formData.append('profilePhoto', file)
-
-        const response = await makeAuthenticatedRequest(`${url}/api/user/uploadPhoto`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }, navigate)
-
-        if (response.status === 200) {
-          setUserData((prev) => ({ ...prev, profilePhoto: response.data.profilePhoto }))
-          alert('Фотография успешно обновлена!')
-        } else {
-          alert('Ошибка при загрузке фотографии')
-        }
-      } catch (error) {
-        console.error('Ошибка при загрузке фотографии:', error)
-        alert('Произошла ошибка. Попробуйте позже.')
-      }
+    const file = e.target.files[0];
+    if (!file) {
+        console.error("Файл не выбран");
+        return;
     }
-  }
+
+    const token = localStorage.getItem('accessToken');
+    const formData = new FormData();
+    formData.append('profilePhoto', file);
+
+    console.log("Отправляемый файл:", file);
+    console.log("Отправляемый FormData:", formData);
+
+    try {
+        const response = await fetch(`${url}/api/user/uploadPhoto`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            console.log("Файл успешно загружен:", result);
+            setUserData((prev) => ({ ...prev, profilePhoto: result.profilePhoto }));
+            alert("Фотография успешно обновлена!");
+        } else {
+            console.error("Ошибка при загрузке файла:", result);
+            alert("Ошибка при загрузке фотографии");
+        }
+    } catch (error) {
+        console.error("Ошибка при загрузке фото:", error);
+        alert("Произошла ошибка. Попробуйте позже.");
+    }
+};
 
   const handleSave = async () => {
     try {

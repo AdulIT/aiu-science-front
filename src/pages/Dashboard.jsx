@@ -156,7 +156,7 @@ export default function UserProfile() {
         <div className="flex flex-col items-center mb-6">
           <div className="w-48 h-48 mb-4 rounded-full overflow-hidden border-4 border-gray-300">
             <img
-              src={`${url}/public${userData.profilePhoto || '/default-profile.png'}`}
+              src={userData.profilePhoto ? `${url}${userData.profilePhoto}` : '/default-profile.png'}
               alt="Profile Photo"
               className="w-full h-full object-cover"
             />

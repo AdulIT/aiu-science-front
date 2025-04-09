@@ -36,8 +36,8 @@ export default function UserProfile() {
           navigate
         )
         
-        if (response.ok) {
-          const data = await response.json()
+        if (response.status===200) {
+          const data = await response.data
           setUser(data.user)
         } else {
           navigate('/admin-users')
@@ -52,16 +52,18 @@ export default function UserProfile() {
     const fetchUserPublications = async () => {
       try {
         const response = await makeAuthenticatedRequest(
-          `${url}/api/user/${iin}/getPublications`,
-          { method: 'GET', headers: { Authorization: `Bearer ${token}` } },
+          `${url}/api/user/getPublications`,
+          { method: 'GET', headers: { Authorization: `Bearer ${token}`,  }, params: {iin} },
           navigate
         )
 
-        if (response.ok) {
-          const data = await response.json()
-          setPublications(data.publications)
+        if (response.status===200) {
+          const data = await response.data
+          setPublications(data)
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     fetchUserProfile()
@@ -96,6 +98,42 @@ export default function UserProfile() {
             <p><strong>Телефон:</strong> {user.phone}</p>
             <p><strong>Научные интересы:</strong> {user.researchArea}</p>
           </div>
+        </div>
+        <div>
+          {publications.length > 0 ? (
+            publications.map((publication, index) => (
+              <div key={index} className="mb-4 p-4 border border-gray-300 rounded-lg bg-white">
+                <p><strong>Тип публикации:</strong> {publicationTypeMap[publication.publicationType]}</p>
+                <p><strong>Авторы:</strong> {publication.authors}</p>
+                <p><strong>Название статьи:</strong> {publication.title}</p>
+                <p><strong>Год:</strong> {publication.year}</p>
+                <p><strong>Выходные данные:</strong> {publication.output}</p>
+                {publication.doi && <p><strong>Ссылки, DOI:</strong> {publication.doi}</p>}
+                {publication.isbn && <p><strong>ISBN:</strong> {publication.isbn}</p>}
+                {publication.file && (
+                  <p>
+                    <strong>Файл:</strong> <a href={`${url}/${publication.file}`} download className="text-blue-600 hover:underline">Скачать файл</a>
+                  </p>
+                )}
+                <div>
+                  {/* <button
+                    onClick={handleEditPublication}
+                    className="mt-3 py-1 px-3 text-white bg-green-600 rounded-lg hover:bg-green-700"
+                  >
+                    Редактировать
+                  </button> */}
+                  {/* <button
+                    onClick={() => handleDeletePublication(publication.id)}
+                    className="py-1 px-3 text-white bg-red-600 rounded-lg hover:bg-red-700"
+                  >
+                    Удалить
+                  </button> */}
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-600">У вас пока нет публикаций.</p>
+          )}
         </div>
       </div>
     </>

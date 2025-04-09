@@ -33,12 +33,12 @@ export default function AdminPage() {
         'Content-Type': 'application/json',
       },
     }, navigate)
-      .then((res) => res.json())
+
       .then((data) => {
-        if (data.success) {
-          setUsers(data.users)
+        if (data.data.success) {
+          setUsers(data.data.users)
         } else {
-          alert(data.message)
+          alert('smth went wrong')
           navigate('/login')
         }
       })

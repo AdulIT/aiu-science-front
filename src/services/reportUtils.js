@@ -17,12 +17,13 @@ export async function generateReport(url, navigate) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        responseType: 'blob',
       },
       navigate
     )
 
-    if (response.ok) {
-      const blob = await response.blob()
+    if (response.status===200) {
+      const blob = await response.data;
       const reportUrl = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = reportUrl
@@ -56,13 +57,14 @@ export async function generateUserReport(url, navigate, iin) {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ iin }),
+        responseType: 'blob',
+        data: JSON.stringify({ iin }),
       },
       navigate
     )
 
-    if (response.ok) {
-      const blob = await response.blob()
+    if (response.status===200) {
+      const blob = await response.data
       const reportUrl = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = reportUrl

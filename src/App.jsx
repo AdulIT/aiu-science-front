@@ -9,12 +9,12 @@ import AdminHome from './pages/AdminHome'
 import AdminPage from './pages/AdminPage'
 import AdminPublications from './pages/AdminPublications'
 import UserProfile from './pages/UserProfile'
-import PublicationsPage from './pages/PublicationsPage'
 import Navbar from './components/Navbar'
 import ErrorMessage from './components/ErrorMessage'
 import RootLayout from './layouts/RootLayout'
 import './global.css'
 import './App.css'
+import PublicationsPage from './pages/PublicationPage/PublicationsPage'
 
 function App() {
   return (

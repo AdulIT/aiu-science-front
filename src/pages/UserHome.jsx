@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
 import Navbar from '../components/Navbar'
+import PublicationStats from '../components/PublicationStats/PublicationStats'
 
 export default function UserHome() {
   const navigate = useNavigate()
@@ -41,6 +42,7 @@ export default function UserHome() {
         <h1 className="text-2xl font-bold">Добро пожаловать на главную страницу!</h1>
         <p className="mt-4">Вы можете управлять своими публикациями и резюме через навигацию сверху.</p>
       </div>
+      <PublicationStats/>
     </div>
   )
 }

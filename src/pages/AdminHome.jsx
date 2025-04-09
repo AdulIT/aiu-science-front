@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
 import Navbar from '../components/Navbar'
+import PublicationStats from '../components/PublicationStats/PublicationStats'
+import BarChart from '../components/PublicationStats/BarChart'
 
 const publicationTypeMap = {
   scopus_wos: 'Научные труды (Scopus/Web of Science)',
@@ -90,6 +92,9 @@ export default function AdminHome() {
           </div>
         )}
       </div>
+      <div className='w-[72rem] place-self-center'>{statistics?.schools && <BarChart labels={Object.keys(statistics.schools)} series={Object.keys(statistics.schools).map(k => statistics.schools[k])}/>}</div>
+      <PublicationStats />
+
     </div>
   )
 }

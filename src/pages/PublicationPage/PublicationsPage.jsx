@@ -168,7 +168,7 @@ export default function PublicationsPage() {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Публикации</h1>
           {!isAdmin && (
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-4 space-x-4">
               <ADD updateData={fetchPublications}/>
               <button
                 onClick={handleGenerateUserReport}
@@ -197,14 +197,8 @@ export default function PublicationsPage() {
                     <strong>Файл:</strong> <a href={`${url}/${publication.file}`} download className="text-blue-600 hover:underline">Скачать файл</a>
                   </p>
                 )}
-                <div>
+                <div className="flex items-center justify-center space-x-2">
                   <EDIT pub={publication} updateData={fetchPublications}/>
-                  {/* <button
-                    onClick={handleEditPublication}
-                    className="mt-3 py-1 px-3 text-white bg-green-600 rounded-lg hover:bg-green-700"
-                  >
-                    Редактировать
-                  </button> */}
                   <button
                     onClick={() => handleDeletePublication(publication._id)}
                     className="py-1 px-3 text-white bg-red-600 rounded-lg hover:bg-red-700"

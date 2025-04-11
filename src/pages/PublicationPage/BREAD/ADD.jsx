@@ -140,7 +140,7 @@ export default function ADD({ updateData }) {
       >
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col mb-6 bg-gray-50 p-4 rounded-lg shadow-inner"
+          className="flex flex-col w-full"
         >
           {currentStep === 1 ? (
             <>
@@ -224,8 +224,8 @@ export default function ADD({ updateData }) {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                     <span className="text-sm text-red-500">
-                {errors[field.title]?.message}
-              </span>
+                  {errors[field.title]?.message}
+                </span>
                 </div>
               ))}
 
@@ -242,8 +242,8 @@ export default function ADD({ updateData }) {
                   rows={3}
                 />
                   <span className="text-sm text-red-500">
-                {errors.output?.message}
-              </span>
+                  {errors.output?.message}
+                </span>
               </div>
               {watch("publicationType") === "scopus_wos" && (
                 <>
@@ -256,29 +256,31 @@ export default function ADD({ updateData }) {
                     {...register("doi", { required: `DOI is required field` })}
                     className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
-                    <span className="text-sm text-red-500">
-                {errors.doi?.message}
-              </span>
-                  <label className="block mb-1 font-medium text-gray-700">
-                    Scopus
-                  </label>
-                  <input
-                    type="checkbox"
-                    name="scopus"
-                    checked={watch("scopus")}
-                    {...register("scopus")}
-                    //   onChange={handleInputChange}
-                  />
-                  
-                  <label className="block mb-1 font-medium text-gray-700">
-                    WoS
-                  </label>
-                  <input
-                    type="checkbox"
-                    name="wos"
-                    {...register("wos")}
-                    checked={watch("wos")}
-                  />
+                  <span className="text-sm text-red-500">
+                    {errors.doi?.message}
+                  </span>
+                  <div className="flex flex-col space-y-2 mb-4">
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        name="scopus"
+                        checked={watch("scopus")}
+                        {...register("scopus")}
+                        className="w-4 h-4"
+                      />
+                      <label className="font-medium text-gray-700">Scopus</label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        name="wos"
+                        {...register("wos")}
+                        checked={watch("wos")}
+                        className="w-4 h-4"
+                      />
+                      <label className="font-medium text-gray-700">WoS</label>
+                    </div>
+                  </div>
                 </>
               )}
               {watch("publicationType") === "koknvo" && (
@@ -293,8 +295,8 @@ export default function ADD({ updateData }) {
                     className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                     <span className="text-sm text-red-500">
-                {errors.doi?.message}
-              </span>
+                  {errors.doi?.message}
+                </span>
                 </>
               )}
               {watch("publicationType") === "books" && (
@@ -311,39 +313,54 @@ export default function ADD({ updateData }) {
                     className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                     <span className="text-sm text-red-500">
-                {errors.isbn?.message}
-              </span>
+                  {errors.isbn?.message}
+                </span>
                 </>
               )}
 
-              <label className="block mb-1 font-medium text-gray-700">
-                Загрузить файл (PDF)
-              </label>
-              <input
-                type="file"
-                onChange={handleFileChange}
-                accept=".pdf"
-                className="mb-4"
-              />
+              <div className="mt-2">
+                <label className="block mb-1 font-medium text-gray-700">
+                  Загрузить файл (PDF)
+                </label>
+                <div className="flex items-center w-full">
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    accept=".pdf"
+                    className="mb-4 hidden"
+                    id="file-upload"
+                  />
+                  <label
+                    htmlFor="file-upload"
+                    className="cursor-pointer py-2 px-4 text-sm font-semibold text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 whitespace-nowrap flex-shrink-0"
+                  >
+                    Выберите файл
+                  </label>
+                  <div className="ml-2 overflow-hidden flex-1">
+                    {!file && <span className="text-gray-500">Файл не выбран</span>}
+                    {file && <span className="text-gray-500 truncate block">{file.name}</span>}
+                  </div>
+                </div>
                 <span className="text-sm text-red-500">
-                {errorMessage}
-              </span>
+                  {errorMessage}
+                </span>
+              </div>
 
-              <div className="flex justify-between">
+              <div className="flex justify-between mt-8 space-x-4">
                 <button
                   type="button"
                   onClick={() => {
                     setCurrentStep((prev) => prev - 1);
                     clear();
                   }}
-                  className="py-2 px-4 text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="py-2 px-4 text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 whitespace-nowrap"
                 >
                   Назад
                 </button>
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="py-2 px-4 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="py-2 px-4 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 whitespace-nowrap"
                 >
                   Сохранить публикацию
                 </button>

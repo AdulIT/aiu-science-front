@@ -124,16 +124,16 @@ export default function EDIT({ pub, updateData }) {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="py-1 px-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="py-1 px-2 text-xs text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
-        edit
+        Редактировать
       </button>
-      <CustomDialog isOpen={isOpen} title={"Edit"} onClose={onClose}>
+      <CustomDialog isOpen={isOpen} title={"Редактировать публикацию"} onClose={onClose}>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col w-full"
         >
-          <h2 className="text-xl font-bold mb-4 text-white">Новая публикация</h2>
+          <h2 className="text-xl font-bold mb-4 text-white">Текущая публикация</h2>
           {[
             { title: "authors", validate: () => {} },
             { title: "title", validate: () => {} },

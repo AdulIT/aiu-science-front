@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  front:
+    restart: unless-stopped
+    build:
+      context: ./
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    command: npm run dev
+    networks:
+      - compose_network
+
+networks:
+  compose_network:
+    external: true

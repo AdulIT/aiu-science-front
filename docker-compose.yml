@@ -5,6 +5,8 @@ services:
     restart: unless-stopped
     build:
       context: ./
+    security_opt:
+      - apparmor=unconfined
     expose:
       - "3000"
     ports:

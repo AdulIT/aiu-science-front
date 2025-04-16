@@ -154,7 +154,7 @@ export default function PublicationsPage() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <p className="text-lg font-bold">Загрузка...</p>
+        <p className="text-lg font-bold text-gray-700">Загрузка...</p>
       </div>
     )
   }
@@ -162,11 +162,11 @@ export default function PublicationsPage() {
   return (
     <>
       <Navbar role={isAdmin ? 'admin' : 'user'} />
-      <div className="w-full mx-auto min-h-screen bg-[#121212] p-4 md:p-8">
+      <div className="w-full mx-auto min-h-screen bg-white p-4 md:p-8">
         <ErrorMessage message={errorMessage} />
 
-        <div className="flex flex-col md:flex-row justify-between md:items-center mb-6 gap-4">
-          <h1 className="text-xl md:text-2xl font-bold text-white text-center md:text-left">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+          <h1 className="text-xl md:text-2xl font-bold text-gray-800 text-center md:text-left">
             Публикации
           </h1>
           {!isAdmin && (
@@ -174,7 +174,7 @@ export default function PublicationsPage() {
               <ADD updateData={fetchPublications} />
               <button
                 onClick={handleGenerateUserReport}
-                className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-gray-700 hover:bg-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-200"
+                className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
               >
                 Генерировать отчет
               </button>
@@ -187,45 +187,45 @@ export default function PublicationsPage() {
           {publications.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {publications.map((publication, index) => (
-                <div key={index} className="flex flex-col justify-between border border-gray-600 rounded-lg bg-[#1f1f1f] shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden min-h-[300px]">
+                <div key={index} className="flex flex-col justify-between border border-gray-300 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden min-h-[300px]">
                   <div className="p-4">
-                    <div className="mb-3 pb-2 border-b border-gray-700">
-                      <span className="inline-block px-2 py-1 text-xs font-medium text-white bg-blue-600 rounded-full mb-1">
+                    <div className="mb-3 pb-2 border-b border-gray-300">
+                      <span className="inline-block px-2 py-1 text-xs font-medium text-white bg-indigo-500 rounded-full mb-1">
                         {publicationTypeMap[publication.publicationType]}
                       </span>
-                      <h3 className="text-base font-semibold line-clamp-2 mb-1 text-white text-left" title={publication.title}>
+                      <h3 className="text-base font-semibold line-clamp-2 mb-1 text-gray-800 text-left" title={publication.title}>
                         {publication.title}
                       </h3>
-                      <p className="text-xs text-gray-400 text-left">
+                      <p className="text-xs text-gray-600 text-left">
                         Год: {publication.year}
                       </p>
                     </div>
                     
-                    <div className="text-xs text-gray-300 text-left">
+                    <div className="text-xs text-gray-700 text-left">
                       <p className="mb-2 line-clamp-2 flex" title={`Авторы: ${publication.authors}`}>
-                        <span className="font-medium text-gray-200 min-w-[80px]">Авторы:</span> 
+                        <span className="font-medium text-gray-800 min-w-[80px]">Авторы:</span> 
                         <span>{publication.authors}</span>
                       </p>
                       <p className="mb-2 line-clamp-2 flex" title={`Выходные данные: ${publication.output}`}>
-                        <span className="font-medium text-gray-200 min-w-[80px]">Данные:</span> 
+                        <span className="font-medium text-gray-800 min-w-[80px]">Данные:</span> 
                         <span>{publication.output}</span>
                       </p>
                       {publication.doi && (
                         <p className="mb-2 line-clamp-1 flex" title={`DOI: ${publication.doi}`}>
-                          <span className="font-medium text-gray-200 min-w-[80px]">DOI:</span> 
+                          <span className="font-medium text-gray-800 min-w-[80px]">DOI:</span> 
                           <span>{publication.doi}</span>
                         </p>
                       )}
                       {publication.isbn && (
                         <p className="mb-2 line-clamp-1 flex" title={`ISBN: ${publication.isbn}`}>
-                          <span className="font-medium text-gray-200 min-w-[80px]">ISBN:</span> 
+                          <span className="font-medium text-gray-800 min-w-[80px]">ISBN:</span> 
                           <span>{publication.isbn}</span>
                         </p>
                       )}
                       {publication.file && (
                         <p className="mb-2 flex">
-                          <span className="font-medium text-gray-200 min-w-[80px]">Файл:</span>
-                          <a href={`${url}/${publication.file}`} download className="text-blue-400 hover:text-blue-300 hover:underline flex items-center">
+                          <span className="font-medium text-gray-800 min-w-[80px]">Файл:</span>
+                          <a href={`${url}/${publication.file}`} download className="text-blue-500 hover:text-blue-600 hover:underline flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                             </svg>
@@ -236,11 +236,11 @@ export default function PublicationsPage() {
                     </div>
                   </div>
                   
-                  <div className="flex items-center justify-between bg-[#2a2a2a] p-2 mt-auto border-t border-gray-700">
+                  <div className="flex items-center justify-between bg-gray-50 p-2 mt-auto border-t border-gray-300">
                     <EDIT pub={publication} updateData={fetchPublications}/>
                     <button
                       onClick={() => handleDeletePublication(publication._id)}
-                      className="py-1 px-2 text-xs text-white bg-red-600 rounded-lg hover:bg-red-700"
+                      className="py-1 px-2 text-xs text-white bg-rose-500 rounded-lg hover:bg-rose-600"
                     >
                       Удалить
                     </button>
@@ -250,7 +250,7 @@ export default function PublicationsPage() {
             </div>
           ) : (
             <div className="flex justify-center items-center min-h-[50vh] w-full">
-              <p className="text-gray-400 text-lg">У вас пока нет публикаций.</p>
+              <p className="text-gray-600 text-lg">У вас пока нет публикаций.</p>
             </div>
           )}
         </div>

@@ -61,40 +61,78 @@ export default function AdminHome() {
   }
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100">
       <Navbar role="admin" />
-      <div className="max-w-7xl mx-auto p-8">
-        <h1 className="text-2xl font-bold">Добро пожаловать!</h1>
-        <p className="mt-4">Ваша роль в системе - администратор.</p>
-        <p>Вы можете управлять всеми публикациями, резюме и просматривать информацию обо всех сотрудниках.</p>
+      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        {/* Welcome Section */}
+        <div className="bg-white rounded-lg shadow p-6 mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Добро пожаловать!</h1>
+          <p className="text-lg text-gray-600">Ваша роль в системе - <span className="font-semibold text-indigo-600">администратор</span>.</p>
+          <p className="text-gray-500 mt-2">Вы можете управлять всеми публикациями, резюме и просматривать информацию обо всех сотрудниках.</p>
+        </div>
 
+        {/* Statistics Section */}
         {statistics && (
-          <div className="mt-8">
-            <h2 className="text-xl font-bold">Статистика</h2>
-            <p><strong>Всего публикаций:</strong> {statistics.totalPublications}</p>
-            <p><strong>Всего пользователей:</strong> {statistics.totalUsers}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {/* General Stats Card */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <h2 className="text-xl font-bold text-gray-700 mb-4">Общая статистика</h2>
+              <p className="text-gray-600 mb-2"><span className="font-semibold">Всего публикаций:</span> {statistics.totalPublications}</p>
+              <p className="text-gray-600"><span className="font-semibold">Всего пользователей:</span> {statistics.totalUsers}</p>
+            </div>
 
-            <h3 className="text-lg font-semibold mt-4">Публикации по высшим школам:</h3>
-            <ul>
-              {Object.entries(statistics.schools).map(([school, count]) => (
-                <li key={school}>{school}: {count}</li>
-              ))}
-            </ul>
+            {/* Schools Stats Card */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-xl font-bold text-gray-700 mb-4">Публикации по высшим школам</h3>
+              <ul className="list-disc list-inside text-gray-600 space-y-1">
+                {Object.entries(statistics.schools).map(([school, count]) => (
+                  <li key={school}><span className="font-semibold">{school}:</span> {count}</li>
+                ))}
+              </ul>
+            </div>
 
-            <h3 className="text-lg font-semibold mt-4">Типы публикаций:</h3>
-            <ul>
-              {Object.entries(statistics.publicationTypes).map(([type, count]) => (
-                <li key={type}>
-                  {publicationTypeMap[type] ? publicationTypeMap[type] : 'Неизвестный тип публикации'}: {count}
-                </li>
-              ))}
-            </ul>
+            {/* Publication Types Stats Card */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-xl font-bold text-gray-700 mb-4">Типы публикаций</h3>
+              <ul className="list-disc list-inside text-gray-600 space-y-1">
+                {Object.entries(statistics.publicationTypes).map(([type, count]) => (
+                  <li key={type}>
+                    <span className="font-semibold">{publicationTypeMap[type] ? publicationTypeMap[type] : 'Неизвестный тип'}:</span> {count}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         )}
-      </div>
-      <div className='w-[72rem] place-self-center'>{statistics?.schools && <BarChart labels={Object.keys(statistics.schools)} series={Object.keys(statistics.schools).map(k => statistics.schools[k])}/>}</div>
-      <PublicationStats />
 
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 gap-6">
+          {/* Schools Chart */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-bold text-gray-700 mb-4">Статистика по школам</h2>
+            <div className="overflow-x-auto">
+              {statistics?.schools && 
+                <BarChart 
+                  labels={Object.keys(statistics.schools).map(school => 
+                    school === "Высшая школа информационных технологий и инженерии" ? "ВШИТиИ" :
+                    school === "Школа права" ? "ШП" : school
+                  )} 
+                  series={Object.keys(statistics.schools).map(k => statistics.schools[k])}
+                />
+              }
+            </div>
+          </div>
+
+          {/* Publication Types Chart */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-bold text-gray-700 mb-4">Статистика публикаций</h2>
+            <div className="overflow-x-auto">
+              <PublicationStats />
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   )
 }

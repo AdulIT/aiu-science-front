@@ -52,23 +52,36 @@ export default function PublicationStats() {
   }, [navigate]);
 
   return (
-    <div className="flex flex-col items-center gap-2">
-        <div className="flex flex-col w-[72rem] h-full">
-          {data?.types && (
-            <BarChart
-              labels={Object.keys(data.types).map(
-                (k) => publicationTypeMap[k]
-              )}
-              series={Object.keys(data.types).map((k) => data.types[k])}
-            />
-          )}
-              {data?.years && (
+    <div className="flex flex-col gap-8">
+      {/* Publications by Type */}
+      <div className="w-full">
+        {data?.types && (
+          <BarChart
+            labels={Object.keys(data.types).map(k => {
+              const label = publicationTypeMap[k];
+              return label
+                .replace('Научные труды (Scopus/Web of Science)', 'Scopus/WoS')
+                .replace('Статьи РК и не включенные в Scopus/WoS', 'Статьи РК')
+                .replace('Патенты, авторское свидетельство', 'Патенты')
+                .replace('Материалы конференций', 'Конференции');
+            })}
+            series={Object.keys(data.types).map(k => data.types[k])}
+          />
+        )}
+      </div>
+
+      {/* Publications by Year */}
+      <div className="bg-white rounded-lg shadow p-6 mt-6">
+        <h2 className="text-xl font-bold text-gray-700 mb-4">Статистика по годам</h2>
+        <div className="w-full">
+          {data?.years && (
             <LineChart
               labels={Object.keys(data.years)}
-              series={Object.keys(data.years).map((k) => data.years[k])}
+              series={Object.keys(data.years).map(k => data.years[k])}
             />
           )}
         </div>
+      </div>
     </div>
   );
 }

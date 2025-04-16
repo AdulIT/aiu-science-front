@@ -9,9 +9,8 @@ import { publicationTypeMap } from "./PublicationPage/PublicationsPage";
 import {
   Listbox,
   ListboxButton,
-  ListboxOption,
   ListboxOptions,
-  Select,
+  ListboxOption,
 } from "@headlessui/react";
 import PublicationComponents from "../components/FilterComponents/PublicationComponents";
 
@@ -33,6 +32,7 @@ export default function AdminPublications() {
   const [name, setName] = useState(null);
   const [publications, setPublications] = useState([]);
   const url = import.meta.env.VITE_API_URL;
+  
   const fetchData = useCallback(async () => {
     try {
       const token = localStorage.getItem("accessToken");
@@ -60,7 +60,7 @@ export default function AdminPublications() {
       if (response.status === 200) {
         console.log("Публикации успешно загружены!");
         console.log(response);
-        setPublications(response.data); // Здесь данные из Axios
+        setPublications(response.data);
       } else {
         alert("Не удалось загрузить публикации");
       }
@@ -70,6 +70,7 @@ export default function AdminPublications() {
       setIsLoading(false);
     }
   }, [navigate, type, url, school, year, name]);
+  
   useEffect(() => {
     fetchData();
   }, [fetchData, navigate]);
@@ -77,7 +78,7 @@ export default function AdminPublications() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <p className="text-lg font-bold">Загрузка...</p>
+        <p className="text-lg font-bold text-gray-700">Загрузка...</p>
       </div>
     );
   }
@@ -86,77 +87,77 @@ export default function AdminPublications() {
     <>
       <Navbar role="admin" />
       <div className="min-h-screen bg-gray-100 p-8">
-        <h1 className="text-2xl font-bold">Публикации всех сотрудников</h1>
-        <button
-          onClick={() => generateReport(url, navigate)}
-          className="mt-2 py-2 px-4 text-white bg-blue-600 rounded-md hover:bg-blue-700"
-        >
-          Генерировать отчет
-        </button>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+          <h1 className="text-2xl font-bold text-gray-800">Публикации всех сотрудников</h1>
+          <button
+            onClick={() => generateReport(url, navigate)}
+            className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
+          >
+            Генерировать отчет
+          </button>
+        </div>
+
         <PublicationComponents setYear={setYear} setName={setName} setSchool={setSchool} setType={setType} school={school} type={type}/>
-        <div>
+        
+        <div className="mt-6">
           {publications.length > 0 ? (
-            publications.map((publication, index) => (
-              <div
-                key={publication._id}
-                className="mb-4 p-4 border border-gray-300 rounded-lg bg-white"
-              >
-                <p>
-                  <strong>Тип публикации:</strong>{" "}
-                  {publicationTypeMap[publication.publicationType]}
-                </p>
-                <p>
-                  <strong>Авторы:</strong> {publication.authors}
-                </p>
-                <p>
-                  <strong>Название статьи:</strong> {publication.title}
-                </p>
-                <p>
-                  <strong>Год:</strong> {publication.year}
-                </p>
-                <p>
-                  <strong>Выходные данные:</strong> {publication.output}
-                </p>
-                {publication.doi && (
-                  <p>
-                    <strong>Ссылки, DOI:</strong> {publication.doi}
-                  </p>
-                )}
-                {publication.isbn && (
-                  <p>
-                    <strong>ISBN:</strong> {publication.isbn}
-                  </p>
-                )}
-                {publication.file && (
-                  <p>
-                    <strong>Файл:</strong>{" "}
-                    <a
-                      href={`${url}/${publication.file}`}
-                      download
-                      className="text-blue-600 hover:underline"
-                    >
-                      Скачать файл
-                    </a>
-                  </p>
-                )}
-                <div>
-                  {/* <button
-                    onClick={handleEditPublication}
-                    className="mt-3 py-1 px-3 text-white bg-green-600 rounded-lg hover:bg-green-700"
-                  >
-                    Редактировать
-                  </button> */}
-                  {/* <button
-                    onClick={() => handleDeletePublication(publication.id)}
-                    className="py-1 px-3 text-white bg-red-600 rounded-lg hover:bg-red-700"
-                  >
-                    Удалить
-                  </button> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {publications.map((publication) => (
+                <div key={publication._id} className="flex flex-col justify-between border border-gray-300 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden min-h-[300px]">
+                  <div className="p-4">
+                    <div className="mb-3 pb-2 border-b border-gray-300">
+                      <span className="inline-block px-2 py-1 text-xs font-medium text-white bg-indigo-500 rounded-full mb-1">
+                        {publicationTypeMap[publication.publicationType]}
+                      </span>
+                      <h3 className="text-base font-semibold line-clamp-2 mb-1 text-gray-800 text-left" title={publication.title}>
+                        {publication.title}
+                      </h3>
+                      <p className="text-xs text-gray-600 text-left">
+                        Год: {publication.year}
+                      </p>
+                    </div>
+                    
+                    <div className="text-xs text-gray-700 text-left">
+                      <p className="mb-2 line-clamp-2 flex" title={`Авторы: ${publication.authors}`}>
+                        <span className="font-medium text-gray-800 min-w-[80px]">Авторы:</span> 
+                        <span>{publication.authors}</span>
+                      </p>
+                      <p className="mb-2 line-clamp-2 flex" title={`Выходные данные: ${publication.output}`}>
+                        <span className="font-medium text-gray-800 min-w-[80px]">Данные:</span> 
+                        <span>{publication.output}</span>
+                      </p>
+                      {publication.doi && (
+                        <p className="mb-2 line-clamp-1 flex" title={`DOI: ${publication.doi}`}>
+                          <span className="font-medium text-gray-800 min-w-[80px]">DOI:</span> 
+                          <span>{publication.doi}</span>
+                        </p>
+                      )}
+                      {publication.isbn && (
+                        <p className="mb-2 line-clamp-1 flex" title={`ISBN: ${publication.isbn}`}>
+                          <span className="font-medium text-gray-800 min-w-[80px]">ISBN:</span> 
+                          <span>{publication.isbn}</span>
+                        </p>
+                      )}
+                      {publication.file && (
+                        <p className="mb-2 flex">
+                          <span className="font-medium text-gray-800 min-w-[80px]">Файл:</span>
+                          <a href={`${url}/${publication.file}`} download className="text-blue-500 hover:text-blue-600 hover:underline flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            Скачать файл
+                          </a>
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))
+              ))}
+            </div>
           ) : (
-            <p className="text-gray-600">У вас пока нет публикаций.</p>
+            <div className="flex justify-center items-center min-h-[50vh] w-full">
+              <p className="text-gray-600 text-lg">Публикации не найдены.</p>
+            </div>
           )}
         </div>
       </div>

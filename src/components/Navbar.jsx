@@ -12,21 +12,21 @@ const Navbar = ({ role }) => {
   }
 
   return (
-    <nav className="bg-gray-800 p-4 mb-6 shadow-md">
+    <nav className="bg-gray-800 p-4 mb-6 border-b border-gray-700">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo/Brand - can be added here if needed */}
         {/* <Link to="/" className="text-white text-lg font-bold">Your Logo</Link> */}
 
         {/* Desktop Menu Links */}
         <div className="hidden md:flex space-x-6">
-          <Link to={role === 'admin' ? "/home-admin" : "/home-user"} className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200">
+          <Link to={role === 'admin' ? "/home-admin" : "/home-user"} className="text-white hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200">
             Главная
           </Link>
-          <Link to={role === 'admin' ? "/admin-publications" : "/publications"} className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200">
+          <Link to={role === 'admin' ? "/admin-publications" : "/publications"} className="text-white hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200">
             Публикации
           </Link>
           {role === 'admin' && (
-            <Link to="/admin-users" className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200">
+            <Link to="/admin-users" className="text-white hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200">
               Все сотрудники
             </Link>
           )}
@@ -34,7 +34,7 @@ const Navbar = ({ role }) => {
 
         {/* Profile and Logout - Visible on Desktop */}
         <div className="hidden md:flex items-center space-x-4">
-          <Link to="/dashboard" className="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200">
+          <Link to="/dashboard" className="text-white hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200">
             Профиль
           </Link>
           <button 
@@ -49,7 +49,7 @@ const Navbar = ({ role }) => {
         <div className="md:hidden flex justify-end w-full">
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="text-gray-400 hover:text-white focus:outline-none focus:text-white"
+            className="text-white hover:text-white focus:outline-none focus:text-white"
           >
             <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
               {isMobileMenuOpen ? (
@@ -64,18 +64,18 @@ const Navbar = ({ role }) => {
 
       {/* Mobile Menu - Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-gray-800 shadow-lg rounded-b-lg mt-2">
+        <div className="md:hidden bg-gray-800 rounded-b-lg mt-2 border-t border-gray-700">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <Link 
               to={role === 'admin' ? "/home-admin" : "/home-user"} 
-              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+              className="text-white hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Главная
             </Link>
             <Link 
               to={role === 'admin' ? "/admin-publications" : "/publications"} 
-              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+              className="text-white hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Публикации
@@ -83,7 +83,7 @@ const Navbar = ({ role }) => {
             {role === 'admin' && (
               <Link 
                 to="/admin-users" 
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                className="text-white hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Все сотрудники
@@ -91,7 +91,7 @@ const Navbar = ({ role }) => {
             )}
             <Link 
               to="/dashboard" 
-              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+              className="text-white hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Профиль

@@ -124,7 +124,7 @@ export default function EDIT({ pub, updateData }) {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="py-1 px-2 text-xs text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="py-1 px-2 text-xs text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         Редактировать
       </button>
@@ -133,12 +133,13 @@ export default function EDIT({ pub, updateData }) {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col w-full"
         >
-          <h2 className="text-xl font-bold mb-4 text-white">Текущая публикация</h2>
+          <h2 className="text-xl font-bold mb-4 text-gray-800">Текущая публикация</h2>
           {[
-            { title: "authors", validate: () => {} },
-            { title: "title", validate: () => {} },
+            { title: "authors", label: "Авторы", validate: () => {} },
+            { title: "title", label: "Название", validate: () => {} },
             {
               title: "year",
+              label: "Год",
               validate: (value) => {
                 const regex = /^\d{4}$/;
                 if (!regex.test(value)) {
@@ -149,10 +150,8 @@ export default function EDIT({ pub, updateData }) {
             },
           ].map((field) => (
             <div key={field.title} className="mb-4">
-              <label className="block mb-1 font-medium text-white">
-                {field.title === "authors" && "Авторы"}
-                {field.title === "title" && "Название"}
-                {field.title === "year" && "Год"}
+              <label className="block mb-1 font-medium text-gray-700">
+                {field.label}
               </label>
               <input
                 type="text"
@@ -162,7 +161,7 @@ export default function EDIT({ pub, updateData }) {
                   validate: field.validate,
                   required: `${field.title} is required field`,
                 })}
-                className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#2a2a2a] text-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
               />
               <span className="text-sm text-red-500">
                 {errors[field.title]?.message}
@@ -171,7 +170,7 @@ export default function EDIT({ pub, updateData }) {
           ))}
 
           <div className="mb-4">
-            <label className="block mb-1 font-medium text-white">
+            <label className="block mb-1 font-medium text-gray-700">
               Выходные данные
             </label>
             <textarea
@@ -180,7 +179,7 @@ export default function EDIT({ pub, updateData }) {
               {...register("output", {
                 required: `Output is required field`,
               })}
-              className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#2a2a2a] text-white"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
               rows={3}
             />
             <span className="text-sm text-red-500">
@@ -190,7 +189,7 @@ export default function EDIT({ pub, updateData }) {
 
           {pub?.publicationType === "scopus_wos" && (
             <>
-              <label className="block mb-1 font-medium text-white">
+              <label className="block mb-1 font-medium text-gray-700">
                 Ссылки, DOI
               </label>
               <input
@@ -198,7 +197,7 @@ export default function EDIT({ pub, updateData }) {
                 defaultValue={pub?.doi}
                 name="doi"
                 {...register("doi", { required: `DOI is required field` })}
-                className="w-full px-3 py-2 mb-4 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#2a2a2a] text-white"
+                className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
               />
               <span className="text-sm text-red-500">
                 {errors.doi?.message}
@@ -212,7 +211,7 @@ export default function EDIT({ pub, updateData }) {
                     {...register("scopus")}
                     className="w-4 h-4 mr-3"
                   />
-                  <label className="font-medium text-white">Scopus</label>
+                  <label className="font-medium text-gray-700">Scopus</label>
                 </div>
                 <div className="flex items-center">
                   <input
@@ -222,14 +221,14 @@ export default function EDIT({ pub, updateData }) {
                     {...register("wos")}
                     className="w-4 h-4 mr-3"
                   />
-                  <label className="font-medium text-white">WoS</label>
+                  <label className="font-medium text-gray-700">WoS</label>
                 </div>
               </div>
             </>
           )}
           {pub?.publicationType === "koknvo" && (
             <>
-              <label className="block mb-1 font-medium text-white">
+              <label className="block mb-1 font-medium text-gray-700">
                 Ссылки, DOI
               </label>
               <input
@@ -237,7 +236,7 @@ export default function EDIT({ pub, updateData }) {
                 name="doi"
                 defaultValue={pub?.doi}
                 {...register("doi", { required: `DOI is required field` })}
-                className="w-full px-3 py-2 mb-4 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#2a2a2a] text-white"
+                className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
               />
               <span className="text-sm text-red-500">
                 {errors.doi?.message}
@@ -246,7 +245,7 @@ export default function EDIT({ pub, updateData }) {
           )}
           {pub?.publicationType === "books" && (
             <>
-              <label className="block mb-1 font-medium text-white">
+              <label className="block mb-1 font-medium text-gray-700">
                 ISBN
               </label>
               <input
@@ -256,50 +255,61 @@ export default function EDIT({ pub, updateData }) {
                 {...register("isbn", {
                   required: `ISBN is required field`,
                 })}
-                className="w-full px-3 py-2 mb-4 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#2a2a2a] text-white"
+                className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
               />
               <span className="text-sm text-red-500">
                 {errors.isbn?.message}
               </span>
             </>
           )}
-
-          <div className="mt-2">
-            <label className="block mb-1 font-medium text-white">
-              Загрузить файл (PDF)
-            </label>
-            <div className="flex items-center w-full">
-              <input
-                type="file"
-                onChange={handleFileChange}
-                accept=".pdf"
-                className="mb-4 hidden"
-                id="file-upload-edit"
-              />
-              <label
-                htmlFor="file-upload-edit"
-                className="cursor-pointer py-2 px-4 text-sm font-semibold text-gray-200 bg-gray-700 rounded-lg hover:bg-gray-600 whitespace-nowrap flex-shrink-0"
-              >
-                Выберите файл
+          {pub?.publicationType === "patents" && (
+            <>
+              <label className="block mb-1 font-medium text-gray-700">
+                DOI патента
               </label>
-              <div className="ml-2 overflow-hidden flex-1">
-                {!file && <span className="text-gray-400">Файл не выбран</span>}
-                {file && <span className="text-gray-400 truncate block">{file.name}</span>}
-              </div>
-            </div>
-            <a className="text-sm text-blue-400 hover:underline" href={pub.file}>
-              {pub.file}
-            </a>
-            <span className="text-sm text-red-500 block mt-1">{errorMessage}</span>
+              <input
+                type="text"
+                name="patentDoi"
+                defaultValue={pub?.patentDoi}
+                {...register("patentDoi", {
+                  required: `Patent DOI is required field`,
+                })}
+                className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
+              />
+              <span className="text-sm text-red-500">
+                {errors.patentDoi?.message}
+              </span>
+            </>
+          )}
+
+          <div className="mb-4">
+            <label className="block mb-1 font-medium text-gray-700">
+              Загрузить файл (PDF, макс. 5MB)
+            </label>
+            <input
+              type="file"
+              name="file"
+              accept=".pdf"
+              onChange={handleFileChange}
+              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            />
+            {errorMessage && (
+              <span className="text-sm text-red-500">{errorMessage}</span>
+            )}
+            {errors.file && (
+              <span className="text-sm text-red-500">
+                {errors.file?.message}
+              </span>
+            )}
           </div>
 
-          <div className="flex justify-end mt-8">
+          <div className="flex justify-end gap-3">
             <button
               type="submit"
               disabled={uploading}
-              className="py-2 px-4 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 whitespace-nowrap"
+              className="py-2 px-4 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
             >
-              Сохранить публикацию
+              {uploading ? "Загрузка..." : "Сохранить"}
             </button>
           </div>
         </form>

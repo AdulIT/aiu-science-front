@@ -145,7 +145,7 @@ export default function ADD({ updateData }) {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-gray-700 hover:bg-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-200"
+        className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
       >
         Добавить публикацию
       </button>
@@ -160,7 +160,7 @@ export default function ADD({ updateData }) {
         >
           {currentStep === 1 ? (
             <>
-              <h2 className="text-xl font-bold mb-4 text-white">
+              <h2 className="text-xl font-bold mb-4 text-gray-800">
                 Выберите тип публикации
               </h2>
               <div className="w-full mb-4">
@@ -169,25 +169,25 @@ export default function ADD({ updateData }) {
                   onChange={(value) => setValue("publicationType", value)}
                 >
                   <div className="relative">
-                    <ListboxButton className="w-full border border-gray-600 bg-[#2a2a2a] text-left px-4 py-2 cursor-pointer rounded-lg hover:border-gray-500 transition-colors duration-200 text-white">
+                    <ListboxButton className="w-full border border-gray-300 bg-white text-left px-4 py-2 cursor-pointer rounded-lg hover:border-gray-400 transition-colors duration-200 text-gray-800">
                       <span className="block overflow-hidden whitespace-nowrap text-ellipsis">
                         {selectedPublicationType
                           ? publicationTypeMap[selectedPublicationType]
                           : "Выберите тип публикации"}
                       </span>
                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                        <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                           <path fillRule="evenodd" d="M10 3a.75.75 0 01.53.22l3.5 3.5a.75.75 0 01-1.06 1.06L10 4.81 6.03 8.78a.75.75 0 01-1.06-1.06l3.5-3.5A.75.75 0 0110 3zm-3.97 9.28a.75.75 0 011.06 0L10 15.19l2.97-2.91a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 010-1.06z" clipRule="evenodd" />
                         </svg>
                       </span>
                     </ListboxButton>
-                    <ListboxOptions className="absolute z-10 mt-1 w-full rounded-lg shadow-lg overflow-hidden bg-[#2a2a2a] border border-gray-600">
+                    <ListboxOptions className="absolute z-10 mt-1 w-full rounded-lg shadow-lg overflow-hidden bg-white border border-gray-300">
                       {Object.entries(publicationTypeMap).map(([value, label]) => (
                         <ListboxOption
                           key={value}
                           value={value}
                           className={({ active }) =>
-                            `py-2 px-4 cursor-pointer ${active ? 'bg-blue-600 text-white' : 'text-gray-300'}`
+                            `py-2 px-4 cursor-pointer ${active ? 'bg-indigo-500 text-white' : 'text-gray-800'}`
                           }
                         >
                           {label}
@@ -213,14 +213,14 @@ export default function ADD({ updateData }) {
                   setCurrentStep((prev) => prev + 1);
                 }}
                 type="button"
-                className="place-self-end py-2 px-4 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="place-self-end py-2 px-4 text-white bg-emerald-500 rounded-lg hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 Следующий
               </button>
             </>
           ) : (
             <>
-              <h2 className="text-xl font-bold mb-4 text-white">Новая публикация</h2>
+              <h2 className="text-xl font-bold mb-4 text-gray-800">Новая публикация</h2>
               {[
                 { title: "authors", label: "Авторы", validate: () => {} },
                 { title: "title", label: "Название", validate: () => {} },
@@ -238,7 +238,7 @@ export default function ADD({ updateData }) {
                 },
               ].map((field) => (
                 <div key={field.title} className="mb-4">
-                  <label className="block mb-1 font-medium text-gray-200">
+                  <label className="block mb-1 font-medium text-gray-700">
                     {field.label}
                   </label>
                   <input
@@ -248,16 +248,16 @@ export default function ADD({ updateData }) {
                       validate: field.validate,
                       required: `${field.title} is required field`,
                     })}
-                    className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#2a2a2a] text-white"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
                   />
-                    <span className="text-sm text-red-500">
-                  {errors[field.title]?.message}
-                </span>
+                  <span className="text-sm text-red-500">
+                    {errors[field.title]?.message}
+                  </span>
                 </div>
               ))}
 
               <div className="mb-4">
-                <label className="block mb-1 font-medium text-gray-200">
+                <label className="block mb-1 font-medium text-gray-700">
                   Выходные данные
                 </label>
                 <textarea
@@ -265,70 +265,70 @@ export default function ADD({ updateData }) {
                   {...register("output", {
                     required: `Output is required field`,
                   })}
-                  className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#2a2a2a] text-white"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
                   rows={3}
                 />
-                  <span className="text-sm text-red-500">
+                <span className="text-sm text-red-500">
                   {errors.output?.message}
                 </span>
               </div>
-              {watch("publicationType") === "scopus_wos" && (
+              {selectedPublicationType === "scopus_wos" && (
                 <>
-                  <label className="block mb-1 font-medium text-gray-200">
+                  <label className="block mb-1 font-medium text-gray-700">
                     Ссылки, DOI
                   </label>
                   <input
                     type="text"
                     name="doi"
-                    {...register("doi", { required: `DOI is required field` })}
-                    className="w-full px-3 py-2 mb-4 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#2a2a2a] text-white"
+                    {...register("doi", {
+                      required: `DOI is required field`,
+                    })}
+                    className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
                   />
                   <span className="text-sm text-red-500">
                     {errors.doi?.message}
                   </span>
-                  <div className="flex flex-col space-y-2 mb-4">
-                    <div className="flex items-center space-x-2">
+                  <div className="flex flex-col space-y-3 mb-4">
+                    <div className="flex items-center">
                       <input
                         type="checkbox"
                         name="scopus"
-                        checked={watch("scopus")}
                         {...register("scopus")}
-                        className="w-4 h-4"
+                        className="w-4 h-4 mr-3"
                       />
-                      <label className="font-medium text-gray-200">Scopus</label>
+                      <label className="font-medium text-gray-700">Scopus</label>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center">
                       <input
                         type="checkbox"
                         name="wos"
                         {...register("wos")}
-                        checked={watch("wos")}
-                        className="w-4 h-4"
+                        className="w-4 h-4 mr-3"
                       />
-                      <label className="font-medium text-gray-200">WoS</label>
+                      <label className="font-medium text-gray-700">WoS</label>
                     </div>
                   </div>
                 </>
               )}
-              {watch("publicationType") === "koknvo" && (
+              {selectedPublicationType === "koknvo" && (
                 <>
-                  <label className="block mb-1 font-medium text-gray-200">
+                  <label className="block mb-1 font-medium text-gray-700">
                     Ссылки, DOI
                   </label>
                   <input
                     type="text"
                     name="doi"
                     {...register("doi", { required: `DOI is required field` })}
-                    className="w-full px-3 py-2 mb-4 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#2a2a2a] text-white"
+                    className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
                   />
-                    <span className="text-sm text-red-500">
-                  {errors.doi?.message}
-                </span>
+                  <span className="text-sm text-red-500">
+                    {errors.doi?.message}
+                  </span>
                 </>
               )}
-              {watch("publicationType") === "books" && (
+              {selectedPublicationType === "books" && (
                 <>
-                  <label className="block mb-1 font-medium text-gray-200">
+                  <label className="block mb-1 font-medium text-gray-700">
                     ISBN
                   </label>
                   <input
@@ -337,59 +337,69 @@ export default function ADD({ updateData }) {
                     {...register("isbn", {
                       required: `ISBN is required field`,
                     })}
-                    className="w-full px-3 py-2 mb-4 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#2a2a2a] text-white"
+                    className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
                   />
-                    <span className="text-sm text-red-500">
-                  {errors.isbn?.message}
-                </span>
+                  <span className="text-sm text-red-500">
+                    {errors.isbn?.message}
+                  </span>
+                </>
+              )}
+              {selectedPublicationType === "patents" && (
+                <>
+                  <label className="block mb-1 font-medium text-gray-700">
+                    DOI патента
+                  </label>
+                  <input
+                    type="text"
+                    name="patentDoi"
+                    {...register("patentDoi", {
+                      required: `Patent DOI is required field`,
+                    })}
+                    className="w-full px-3 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
+                  />
+                  <span className="text-sm text-red-500">
+                    {errors.patentDoi?.message}
+                  </span>
                 </>
               )}
 
-              <div className="mt-2">
-                <label className="block mb-1 font-medium text-gray-200">
-                  Загрузить файл (PDF)
+              <div className="mb-4">
+                <label className="block mb-1 font-medium text-gray-700">
+                  Загрузить файл (PDF, макс. 5MB)
                 </label>
-                <div className="flex items-center w-full">
-                  <input
-                    type="file"
-                    onChange={handleFileChange}
-                    accept=".pdf"
-                    className="mb-4 hidden"
-                    id="file-upload"
-                  />
-                  <label
-                    htmlFor="file-upload"
-                    className="cursor-pointer py-2 px-4 text-sm font-semibold text-gray-200 bg-gray-700 rounded-lg hover:bg-gray-600 whitespace-nowrap flex-shrink-0"
-                  >
-                    Выберите файл
-                  </label>
-                  <div className="ml-2 overflow-hidden flex-1">
-                    {!file && <span className="text-gray-400">Файл не выбран</span>}
-                    {file && <span className="text-gray-400 truncate block">{file.name}</span>}
-                  </div>
-                </div>
-                <span className="text-sm text-red-500">
-                  {errorMessage}
-                </span>
+                <input
+                  type="file"
+                  name="file"
+                  accept=".pdf"
+                  onChange={handleFileChange}
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                />
+                {errorMessage && (
+                  <span className="text-sm text-red-500">
+                    {errorMessage}
+                  </span>
+                )}
+                 {errors.file && (
+                  <span className="text-sm text-red-500">
+                    {errors.file?.message}
+                  </span>
+                )}
               </div>
 
-              <div className="flex justify-between mt-8 space-x-4">
+              <div className="flex justify-end gap-3">
                 <button
+                  onClick={() => setCurrentStep((prev) => prev - 1)}
                   type="button"
-                  onClick={() => {
-                    setCurrentStep((prev) => prev - 1);
-                    clear();
-                  }}
-                  className="py-2 px-4 text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 whitespace-nowrap"
+                  className="py-2 px-4 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
                 >
                   Назад
                 </button>
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="py-2 px-4 text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 whitespace-nowrap"
+                  className="py-2 px-4 text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
                 >
-                  Сохранить публикацию
+                  {uploading ? "Загрузка..." : "Отправить"}
                 </button>
               </div>
             </>

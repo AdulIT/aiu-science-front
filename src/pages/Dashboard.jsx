@@ -174,7 +174,7 @@ export default function UserProfile() {
               className="w-full h-full object-cover"
             />
           </div>
-          {isEditing && !isAdmin && (
+          {isEditing && (
             <label className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
               Загрузить фото
               <input
@@ -195,7 +195,7 @@ export default function UserProfile() {
             "birthDate",
             "phone",
             "email",
-            "researchArea",
+            "researchArea"
           ].map((field) => (
             <div key={field}>
               <label className="block mb-1 font-medium text-gray-700">
@@ -208,7 +208,7 @@ export default function UserProfile() {
                 {field === "email" && "Email"}
                 {field === "researchArea" && "Научные интересы"}
               </label>
-              {isEditing && !isAdmin ? (
+              {isEditing ? (
                 field === "researchArea" ? (
                   <textarea
                     name={field}
@@ -232,7 +232,34 @@ export default function UserProfile() {
               )}
             </div>
           ))}
+
+          <div>
+            <label className="block mb-1 font-medium text-gray-700">Высшая школа</label>
+            {isEditing ? (
+              <select
+                name="higherSchool"
+                value={userData.higherSchool}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Выберите школу</option>
+                <option value="Высшая школа информационных технологий и инженерии">Высшая школа информационных технологий и инженерии</option>
+                <option value="Высшая школа экономики">Высшая школа экономики</option>
+                <option value="Высшая школа права">Высшая школа права</option>
+                <option value="Педагогический институт">Педагогический институт</option>
+                <option value="Высшая школа искусств и гуманитарных наук">Высшая школа искусств и гуманитарных наук</option>
+                <option value="Высшая школа естественных наук">Высшая школа естественных наук</option>
+              </select>
+            ) : (
+              <p className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100">
+                {userData.higherSchool || 'Не указано'}
+              </p>
+            )}
+          </div>
+
         </div>
+
+        
 
         {!isAdmin && (
           <div className="mt-6 flex justify-center gap-4">

@@ -9,7 +9,7 @@ export default function BarChart({
   const total = series.reduce((prev, cur) => prev + cur, 0) || 1;
   return (
     <ReactApexChart
-      className='h-full min-h-fit  w-full'
+      className='h-full min-h-fit  w-1/2'
       type='bar'
       series={[{ name: 'basic', data: series }]}
       options={{

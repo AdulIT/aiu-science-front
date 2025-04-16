@@ -124,7 +124,7 @@ export default function EDIT({ pub, updateData }) {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="py-1 px-2 text-xs text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="py-1 px-2 text-xs text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         Редактировать
       </button>

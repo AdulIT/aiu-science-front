@@ -165,7 +165,7 @@ export default function PublicationsPage() {
       <div className="w-full mx-auto min-h-screen bg-white p-4 md:p-8">
         <ErrorMessage message={errorMessage} />
 
-        <div className="flex flex-col md:flex-row justify-between md:items-center mb-6 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
           <h1 className="text-xl md:text-2xl font-bold text-gray-800 text-center md:text-left">
             Публикации
           </h1>
@@ -174,7 +174,7 @@ export default function PublicationsPage() {
               <ADD updateData={fetchPublications} />
               <button
                 onClick={handleGenerateUserReport}
-                className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-gray-600 hover:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-200"
+                className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
               >
                 Генерировать отчет
               </button>
@@ -190,7 +190,7 @@ export default function PublicationsPage() {
                 <div key={index} className="flex flex-col justify-between border border-gray-300 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden min-h-[300px]">
                   <div className="p-4">
                     <div className="mb-3 pb-2 border-b border-gray-300">
-                      <span className="inline-block px-2 py-1 text-xs font-medium text-white bg-blue-500 rounded-full mb-1">
+                      <span className="inline-block px-2 py-1 text-xs font-medium text-white bg-indigo-500 rounded-full mb-1">
                         {publicationTypeMap[publication.publicationType]}
                       </span>
                       <h3 className="text-base font-semibold line-clamp-2 mb-1 text-gray-800 text-left" title={publication.title}>
@@ -240,7 +240,7 @@ export default function PublicationsPage() {
                     <EDIT pub={publication} updateData={fetchPublications}/>
                     <button
                       onClick={() => handleDeletePublication(publication._id)}
-                      className="py-1 px-2 text-xs text-white bg-red-500 rounded-lg hover:bg-red-600"
+                      className="py-1 px-2 text-xs text-white bg-rose-500 rounded-lg hover:bg-rose-600"
                     >
                       Удалить
                     </button>

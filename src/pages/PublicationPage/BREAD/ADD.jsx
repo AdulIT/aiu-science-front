@@ -145,7 +145,7 @@ export default function ADD({ updateData }) {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full sm:w-auto py-2 px-4 text-sm text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-200"
+        className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
       >
         Добавить публикацию
       </button>
@@ -187,7 +187,7 @@ export default function ADD({ updateData }) {
                           key={value}
                           value={value}
                           className={({ active }) =>
-                            `py-2 px-4 cursor-pointer ${active ? 'bg-blue-500 text-white' : 'text-gray-800'}`
+                            `py-2 px-4 cursor-pointer ${active ? 'bg-indigo-500 text-white' : 'text-gray-800'}`
                           }
                         >
                           {label}
@@ -213,7 +213,7 @@ export default function ADD({ updateData }) {
                   setCurrentStep((prev) => prev + 1);
                 }}
                 type="button"
-                className="place-self-end py-2 px-4 text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="place-self-end py-2 px-4 text-white bg-emerald-500 rounded-lg hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 Следующий
               </button>
@@ -372,7 +372,7 @@ export default function ADD({ updateData }) {
                   name="file"
                   accept=".pdf"
                   onChange={handleFileChange}
-                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                 />
                 {errorMessage && (
                   <span className="text-sm text-red-500">
@@ -397,7 +397,7 @@ export default function ADD({ updateData }) {
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="py-2 px-4 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                  className="py-2 px-4 text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
                 >
                   {uploading ? "Загрузка..." : "Отправить"}
                 </button>

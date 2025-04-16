@@ -71,69 +71,145 @@ export default function UserProfile() {
   }, [navigate, iin])
 
   if (isLoading) {
-    return <p>Загрузка...</p>
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    )
   }
 
   if (!user) {
-    return <p>Пользователь не найден</p>
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <p className="text-lg text-gray-600">Пользователь не найден</p>
+      </div>
+    )
   }
 
   return (
     <>
       <Navbar role="admin" />
-      <div className="min-h-screen bg-gray-100 p-8">
-        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
-          <h1 className="text-2xl font-bold mb-4">Профиль пользователя</h1>
-          <div className="flex justify-center mb-6">
-            <img
-              src={`${url}/public${user.profilePhoto || '/default-profile.png'}`}
-              alt="User Avatar"
-              className="w-36 h-36 rounded-full object-cover"
-            />
-          </div>
-          <div className="mb-4">
-            <p><strong>ФИО:</strong> {user.fullName}</p>
-            <p><strong>Роль:</strong> {user.role}</p>
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Телефон:</strong> {user.phone}</p>
-            <p><strong>Научные интересы:</strong> {user.researchArea}</p>
-          </div>
-        </div>
-        <div>
-          {publications.length > 0 ? (
-            publications.map((publication, index) => (
-              <div key={index} className="mb-4 p-4 border border-gray-300 rounded-lg bg-white">
-                <p><strong>Тип публикации:</strong> {publicationTypeMap[publication.publicationType]}</p>
-                <p><strong>Авторы:</strong> {publication.authors}</p>
-                <p><strong>Название статьи:</strong> {publication.title}</p>
-                <p><strong>Год:</strong> {publication.year}</p>
-                <p><strong>Выходные данные:</strong> {publication.output}</p>
-                {publication.doi && <p><strong>Ссылки, DOI:</strong> {publication.doi}</p>}
-                {publication.isbn && <p><strong>ISBN:</strong> {publication.isbn}</p>}
-                {publication.file && (
-                  <p>
-                    <strong>Файл:</strong> <a href={`${url}/${publication.file}`} download className="text-blue-600 hover:underline">Скачать файл</a>
-                  </p>
-                )}
-                <div>
-                  {/* <button
-                    onClick={handleEditPublication}
-                    className="mt-3 py-1 px-3 text-white bg-green-600 rounded-lg hover:bg-green-700"
-                  >
-                    Редактировать
-                  </button> */}
-                  {/* <button
-                    onClick={() => handleDeletePublication(publication.id)}
-                    className="py-1 px-3 text-white bg-red-600 rounded-lg hover:bg-red-700"
-                  >
-                    Удалить
-                  </button> */}
+      <div className="min-h-screen bg-gray-100 p-4 md:p-8">
+        <div className="max-w-7xl mx-auto">
+          {/* User Profile Card */}
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+              <h1 className="text-2xl font-bold text-white">Профиль пользователя</h1>
+            </div>
+            <div className="p-6">
+              <div className="flex flex-col md:flex-row gap-8">
+                {/* Profile Photo */}
+                <div className="flex flex-col items-center">
+                  <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                    <img
+                      src={user.profilePhoto ? `${url}/public${user.profilePhoto}` : '/default-profile.png'}
+                      alt="User Avatar"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span className={`mt-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                    user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'
+                  }`}>
+                    {user.role === 'admin' ? 'Администратор' : 'Пользователь'}
+                  </span>
+                </div>
+
+                {/* User Details */}
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-sm font-medium text-gray-500">ФИО</label>
+                      <p className="text-gray-900">{user.fullName || 'Не указано'}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-gray-500">Email</label>
+                      <p className="text-gray-900">{user.email || 'Не указано'}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-gray-500">Телефон</label>
+                      <p className="text-gray-900">{user.phone || 'Не указано'}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-500">Научные интересы</label>
+                    <p className="text-gray-900 whitespace-pre-wrap">{user.researchArea || 'Не указано'}</p>
+                  </div>
                 </div>
               </div>
-            ))
-          ) : (
-            <p className="text-gray-600">У вас пока нет публикаций.</p>
-          )}
+            </div>
+          </div>
+
+          {/* Publications Section */}
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="bg-gradient-to-r from-gray-500 to-gray-600 px-6 py-4">
+              <h2 className="text-xl font-bold text-white">Публикации</h2>
+            </div>
+            <div className="p-6">
+              {publications.length > 0 ? (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {publications.map((publication, index) => (
+                    <div key={index} className="flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                      <div className="p-4 flex-1">
+                        <div className="mb-3 pb-2 border-b border-gray-200">
+                          <span className="inline-block px-2 py-1 text-xs font-medium text-white bg-blue-500 rounded-full mb-2">
+                            {publicationTypeMap[publication.publicationType]}
+                          </span>
+                          <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 text-left">
+                            {publication.title}
+                          </h3>
+                          <p className="text-sm text-gray-600 text-left">
+                            Год: {publication.year}
+                          </p>
+                        </div>
+                        
+                        <div className="text-sm text-gray-700">
+                          <p className="mb-2 line-clamp-2 flex" title={`Авторы: ${publication.authors}`}>
+                            <span className="font-medium text-gray-800 min-w-[80px]">Авторы:</span>
+                            <span>{publication.authors}</span>
+                          </p>
+                          <p className="mb-2 line-clamp-2 flex" title={`Выходные данные: ${publication.output}`}>
+                            <span className="font-medium text-gray-800 min-w-[80px]">Данные:</span>
+                            <span>{publication.output}</span>
+                          </p>
+                          {publication.doi && (
+                            <p className="mb-2 line-clamp-1 flex" title={`DOI: ${publication.doi}`}>
+                              <span className="font-medium text-gray-800 min-w-[80px]">DOI:</span>
+                              <span>{publication.doi}</span>
+                            </p>
+                          )}
+                          {publication.isbn && (
+                            <p className="mb-2 line-clamp-1 flex" title={`ISBN: ${publication.isbn}`}>
+                              <span className="font-medium text-gray-800 min-w-[80px]">ISBN:</span>
+                              <span>{publication.isbn}</span>
+                            </p>
+                          )}
+                          {publication.file && (
+                            <p className="mb-2 flex items-center">
+                              <span className="font-medium text-gray-800 min-w-[80px]">Файл:</span>
+                              <a
+                                href={`${url}/${publication.file}`}
+                                download
+                                className="text-blue-500 hover:text-blue-600 hover:underline flex items-center"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                                Скачать файл
+                              </a>
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">У пользователя пока нет публикаций</p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </>

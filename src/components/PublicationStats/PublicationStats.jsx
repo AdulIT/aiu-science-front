@@ -75,7 +75,7 @@ export default function PublicationStats() {
       {/* Publications by Year */}
       <div className="w-full max-w-4xl mx-auto">
         <h2 className="text-xl font-bold text-gray-700 mb-4">Статистика по годам</h2>
-        <div className="w-full">
+        <div className="w-full mx-auto">
           {data?.years && (
             <LineChart
               labels={Object.keys(data.years)}

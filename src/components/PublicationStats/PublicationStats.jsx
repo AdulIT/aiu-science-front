@@ -54,7 +54,7 @@ export default function PublicationStats() {
   return (
     <div className="flex flex-col gap-8">
       {/* Publications by Type */}
-      <div className="w-full">
+      <div className="w-full max-w-4xl mx-auto">
         {data?.types && (
           <BarChart
             labels={Object.keys(data.types).map(k => {
@@ -66,18 +66,22 @@ export default function PublicationStats() {
                 .replace('Материалы конференций', 'Конференции');
             })}
             series={Object.keys(data.types).map(k => data.types[k])}
+            height={300}
+            width="100%"
           />
         )}
       </div>
 
       {/* Publications by Year */}
-      <div className="bg-white rounded-lg shadow p-6 mt-6">
+      <div className="w-full max-w-4xl mx-auto">
         <h2 className="text-xl font-bold text-gray-700 mb-4">Статистика по годам</h2>
         <div className="w-full">
           {data?.years && (
             <LineChart
               labels={Object.keys(data.years)}
               series={Object.keys(data.years).map(k => data.years[k])}
+              height={300}
+              width="100%"
             />
           )}
         </div>

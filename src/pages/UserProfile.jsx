@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { makeAuthenticatedRequest } from '../services/api'
 import Navbar from '../components/Navbar'
+import Pagination from '../components/Pagination/Pagination'
 
 const publicationTypeMap = {
   scopus_wos: 'Научные труды (Scopus/Web of Science)',
@@ -19,6 +20,8 @@ export default function UserProfile() {
   const [publications, setPublications] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('profile')
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 8
   const url = import.meta.env.VITE_API_URL
 
   useEffect(() => {
@@ -69,6 +72,17 @@ export default function UserProfile() {
     fetchUserProfile()
     fetchUserPublications()
   }, [navigate, iin])
+
+  const paginatedPublications = publications.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(publications.length / itemsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   if (isLoading) {
     return (
@@ -145,9 +159,9 @@ export default function UserProfile() {
               <h2 className="text-xl font-bold text-white">Публикации</h2>
             </div>
             <div className="p-6">
-              {publications.length > 0 ? (
+              {paginatedPublications.length > 0 ? (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {publications.map((publication, index) => (
+                  {paginatedPublications.map((publication, index) => (
                     <div key={index} className="flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
                       <div className="p-4 flex-1">
                         <div className="mb-3 pb-2 border-b border-gray-200">
@@ -210,6 +224,14 @@ export default function UserProfile() {
               )}
             </div>
           </div>
+
+          {publications.length > itemsPerPage && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
         </div>
       </div>
     </>

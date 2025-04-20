@@ -110,7 +110,7 @@ export default function AdminHome() {
           {/* Schools Chart */}
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-bold text-gray-700 mb-4">Статистика по школам</h2>
-            <div className="overflow-x-auto">
+            <div className="w-full max-w-4xl mx-auto">
               {statistics?.schools && 
                 <BarChart 
                   labels={Object.keys(statistics.schools).map(school => 
@@ -118,6 +118,8 @@ export default function AdminHome() {
                     school === "Школа права" ? "ШП" : school
                   )} 
                   series={Object.keys(statistics.schools).map(k => statistics.schools[k])}
+                  height={300}
+                  width="100%"
                 />
               }
             </div>
@@ -126,7 +128,7 @@ export default function AdminHome() {
           {/* Publication Types Chart */}
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-bold text-gray-700 mb-4">Статистика публикаций</h2>
-            <div className="overflow-x-auto">
+            <div className="w-full">
               <PublicationStats />
             </div>
           </div>

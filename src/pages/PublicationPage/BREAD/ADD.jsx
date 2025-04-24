@@ -10,6 +10,7 @@ import {
   ListboxOptions,
   ListboxOption,
 } from "@headlessui/react";
+import { crossrefService } from '../../../services/crossrefService';
 
 const url = import.meta.env.VITE_API_URL;
 export default function ADD({ updateData }) {
@@ -139,7 +140,46 @@ export default function ADD({ updateData }) {
 
     setFile(file);
   };
- 
+
+  const [formData, setFormData] = useState({
+    title: '',
+    authors: '',
+    year: new Date().getFullYear(),
+    type: 'articles',
+    journal: '',
+    doi: '',
+    citations: 0
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  // Поиск публикации по DOI
+  const handleDOILookup = async () => {
+    if (!formData.doi) return;
+    
+    setIsLoading(true);
+    try {
+      const publication = await crossrefService.getWorkByDOI(formData.doi);
+      setFormData(prev => ({
+        ...prev,
+        title: publication.title,
+        authors: publication.authors,
+        year: publication.year || prev.year,
+        type: publication.type,
+        journal: publication.journal,
+        citations: publication.citations
+      }));
+    } catch (error) {
+      console.error('Error looking up DOI:', error);
+      alert('Не удалось найти публикацию по указанному DOI');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>

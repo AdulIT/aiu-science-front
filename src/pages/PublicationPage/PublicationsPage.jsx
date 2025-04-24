@@ -10,6 +10,7 @@ import ADD from './BREAD/ADD'
 import EDIT from './BREAD/EDIT'
 import PublicationComponents from '../../components/FilterComponents/PublicationComponents'
 import Pagination from '../../components/Pagination/Pagination'
+import CrossrefImport from '../../components/PublicationImport/CrossrefImport'
 
 
 export const publicationTypeMap = {
@@ -32,6 +33,7 @@ export default function PublicationsPage() {
   const [errorMessage, setErrorMessage] = useState("")
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+  const [showImport, setShowImport] = useState(false);
 
   const url = import.meta.env.VITE_API_URL
 
@@ -183,19 +185,34 @@ export default function PublicationsPage() {
           <h1 className="text-xl md:text-2xl font-bold text-gray-800 text-center md:text-left">
             Публикации
           </h1>
-          {!isAdmin && (
-            <div className="flex flex-col sm:flex-row justify-center md:justify-end items-center gap-3">
-              <ADD updateData={fetchPublications} />
-              <button
-                onClick={handleGenerateUserReport}
-                className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
-              >
-                Генерировать отчет
-              </button>
-            </div>
-          )}
+          <div className="flex flex-col sm:flex-row justify-center md:justify-end items-center gap-3">
+            <button
+              onClick={() => setShowImport(!showImport)}
+              className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+            >
+              {showImport ? 'Скрыть импорт' : 'Импорт из Crossref'}
+            </button>
+            {!isAdmin && (
+              <>
+                <ADD updateData={fetchPublications} />
+                <button
+                  onClick={handleGenerateUserReport}
+                  className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
+                >
+                  Генерировать отчет
+                </button>
+              </>
+            )}
+          </div>
         </div>
-       <PublicationComponents setYear={setYear} setSchool={setSchool} setType={setType} school={school} type={type}/>
+
+        {showImport && (
+          <div className="mb-8">
+            <CrossrefImport onImportSuccess={fetchPublications} />
+          </div>
+        )}
+
+        <PublicationComponents setYear={setYear} setSchool={setSchool} setType={setType} school={school} type={type}/>
 
         <div className="mt-6">
           {paginatedPublications.length > 0 ? (

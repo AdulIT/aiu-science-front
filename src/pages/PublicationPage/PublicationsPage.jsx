@@ -9,6 +9,8 @@ import ErrorMessage from '../../components/ErrorMessage'
 import ADD from './BREAD/ADD'
 import EDIT from './BREAD/EDIT'
 import PublicationComponents from '../../components/FilterComponents/PublicationComponents'
+import Pagination from '../../components/Pagination/Pagination'
+import CrossrefImport from '../../components/PublicationImport/CrossrefImport'
 
 
 export const publicationTypeMap = {
@@ -29,6 +31,9 @@ export default function PublicationsPage() {
   const [year, setYear] = useState(null);
   const [school, setSchool] = useState(null);
   const [errorMessage, setErrorMessage] = useState("")
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+  const [showImport, setShowImport] = useState(false);
 
   const url = import.meta.env.VITE_API_URL
 
@@ -151,6 +156,17 @@ export default function PublicationsPage() {
     }
   }
 
+  const paginatedPublications = publications.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(publications.length / itemsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -169,24 +185,39 @@ export default function PublicationsPage() {
           <h1 className="text-xl md:text-2xl font-bold text-gray-800 text-center md:text-left">
             Публикации
           </h1>
-          {!isAdmin && (
-            <div className="flex flex-col sm:flex-row justify-center md:justify-end items-center gap-3">
-              <ADD updateData={fetchPublications} />
-              <button
-                onClick={handleGenerateUserReport}
-                className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
-              >
-                Генерировать отчет
-              </button>
-            </div>
-          )}
+          <div className="flex flex-col sm:flex-row justify-center md:justify-end items-center gap-3">
+            <button
+              onClick={() => setShowImport(!showImport)}
+              className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+            >
+              {showImport ? 'Скрыть импорт' : 'Импорт из Crossref'}
+            </button>
+            {!isAdmin && (
+              <>
+                <ADD updateData={fetchPublications} />
+                <button
+                  onClick={handleGenerateUserReport}
+                  className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
+                >
+                  Генерировать отчет
+                </button>
+              </>
+            )}
+          </div>
         </div>
-       <PublicationComponents setYear={setYear} setSchool={setSchool} setType={setType} school={school} type={type}/>
+
+        {showImport && (
+          <div className="mb-8">
+            <CrossrefImport onImportSuccess={fetchPublications} />
+          </div>
+        )}
+
+        <PublicationComponents setYear={setYear} setSchool={setSchool} setType={setType} school={school} type={type}/>
 
         <div className="mt-6">
-          {publications.length > 0 ? (
+          {paginatedPublications.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {publications.map((publication, index) => (
+              {paginatedPublications.map((publication, index) => (
                 <div key={index} className="flex flex-col justify-between border border-gray-300 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden min-h-[300px]">
                   <div className="p-4">
                     <div className="mb-3 pb-2 border-b border-gray-300">
@@ -255,6 +286,13 @@ export default function PublicationsPage() {
           )}
         </div>
 
+        {publications.length > itemsPerPage && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
     </>
   )

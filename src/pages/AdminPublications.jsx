@@ -13,6 +13,7 @@ import {
   ListboxOption,
 } from "@headlessui/react";
 import PublicationComponents from "../components/FilterComponents/PublicationComponents";
+import Pagination from '../components/Pagination/Pagination';
 
 export const allHigherSchools = [
   "Высшая школа информационных технологий и инженерии",
@@ -31,6 +32,8 @@ export default function AdminPublications() {
   const [school, setSchool] = useState(null);
   const [name, setName] = useState(null);
   const [publications, setPublications] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
   const url = import.meta.env.VITE_API_URL;
   
   const fetchData = useCallback(async () => {
@@ -75,6 +78,17 @@ export default function AdminPublications() {
     fetchData();
   }, [fetchData, navigate]);
 
+  const paginatedPublications = publications.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(publications.length / itemsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -100,9 +114,9 @@ export default function AdminPublications() {
         <PublicationComponents setYear={setYear} setName={setName} setSchool={setSchool} setType={setType} school={school} type={type}/>
         
         <div className="mt-6">
-          {publications.length > 0 ? (
+          {paginatedPublications.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {publications.map((publication) => (
+              {paginatedPublications.map((publication) => (
                 <div key={publication._id} className="flex flex-col justify-between border border-gray-300 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden min-h-[300px]">
                   <div className="p-4">
                     <div className="mb-3 pb-2 border-b border-gray-300">
@@ -160,6 +174,14 @@ export default function AdminPublications() {
             </div>
           )}
         </div>
+
+        {publications.length > itemsPerPage && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
     </>
   );

@@ -35,6 +35,7 @@ export default function AdminPublications() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const url = import.meta.env.VITE_API_URL;
+  const [selectedSchool, setSelectedSchool] = useState('all');
   
   const fetchData = useCallback(async () => {
     try {
@@ -100,15 +101,27 @@ export default function AdminPublications() {
   return (
     <>
       <Navbar role="admin" />
-      <div className="min-h-screen bg-gray-100 p-8">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+      <div className="min-h-screen bg-gray-100 p-8 mt-0">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 w-full">
           <h1 className="text-2xl font-bold text-gray-800">Публикации всех сотрудников</h1>
-          <button
-            onClick={() => generateReport(url, navigate)}
-            className="w-full sm:w-auto py-2 px-4 text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
-          >
-            Генерировать отчет
-          </button>
+          <div className="flex flex-1 gap-2 items-center justify-end">
+            <select
+              value={selectedSchool}
+              onChange={e => setSelectedSchool(e.target.value)}
+              className="h-11 px-4 rounded-lg border border-gray-300 bg-white text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition w-full sm:w-auto min-w-[180px]"
+            >
+              <option value="all">Все школы</option>
+              {allHigherSchools.map(school => (
+                <option key={school} value={school}>{school}</option>
+              ))}
+            </select>
+            <button
+              onClick={() => generateReport(url, navigate, selectedSchool)}
+              className="h-11 px-4 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition w-full sm:w-auto text-sm"
+            >
+              Генерировать отчёт
+            </button>
+          </div>
         </div>
 
         <PublicationComponents setYear={setYear} setName={setName} setSchool={setSchool} setType={setType} school={school} type={type}/>

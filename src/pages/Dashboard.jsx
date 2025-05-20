@@ -125,6 +125,19 @@ export default function UserProfile() {
         return;
       }
 
+      // Подготавливаем данные для отправки
+      const updateData = {
+        fullName: userData.fullName,
+        scopusId: userData.scopusId,
+        wosId: userData.wosId,
+        orcid: userData.orcid,
+        birthDate: userData.birthDate,
+        phone: userData.phone,
+        email: userData.email,
+        researchArea: userData.researchArea,
+        higherSchool: userData.higherSchool
+      };
+
       const response = await makeAuthenticatedRequest(
         `${url}/api/user/update`,
         {
@@ -133,20 +146,26 @@ export default function UserProfile() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(userData),
+          data: updateData
         },
         navigate
       );
 
       if (response.status === 200) {
+        // Обновляем локальное состояние
+        setUserData(prevData => ({
+          ...prevData,
+          ...response.data
+        }));
+        
         alert("Информация успешно обновлена!");
         setIsEditing(false);
       } else {
-        alert("Ошибка при обновлении информации");
+        throw new Error(response.data?.message || "Ошибка при обновлении информации");
       }
     } catch (error) {
       console.error("Ошибка при обновлении:", error);
-      alert("Произошла ошибка. Попробуйте позже.");
+      alert(error.message || "Произошла ошибка. Попробуйте позже.");
     }
   };
 
@@ -252,7 +271,7 @@ export default function UserProfile() {
               </select>
             ) : (
               <p className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100">
-                {userData.higherSchool || 'Не указано'}
+                {userData.higherSchool || "Не указано"}
               </p>
             )}
           </div>

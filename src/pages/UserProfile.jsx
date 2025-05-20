@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { makeAuthenticatedRequest } from '../services/api'
-import { predictionService } from '../services/predictionService'
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination/Pagination'
 
 const publicationTypeMap = {
   scopus_wos: 'Научные труды (Scopus/Web of Science)',
-  koknvo: 'КОКНВО',
+  koknvo: 'КОКСНВО',
   conference: 'Материалы конференций',
   articles: 'Статьи РК и не включенные в Scopus/WoS',
   books: 'Монографии, книги и учебные материалы',
@@ -66,14 +65,6 @@ export default function UserProfile() {
         if (response.status===200) {
           const data = await response.data
           setPublications(data)
-          
-          // Анализируем публикации сразу после их получения
-          if (data.length > 0) {
-            const prediction = predictionService.predictNextYearPublications(data)
-            const trend = predictionService.analyzePublicationTrend(data)
-            setPublicationPrediction(prediction)
-            setPublicationTrend(trend)
-          }
         }
       } catch (error) {
         console.error('Error fetching publications:', error)
@@ -194,57 +185,6 @@ export default function UserProfile() {
             </div>
             <div className="p-6">
               {/* Publication Stats and Predictions */}
-              {publications.length > 0 && (
-                <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Prediction Card */}
-                  <div className="bg-white border border-blue-100 rounded-lg shadow-sm overflow-hidden">
-                    <div className="bg-blue-50 px-4 py-2 border-b border-blue-100">
-                      <h3 className="text-sm font-medium text-blue-900">Прогноз на следующий год</h3>
-                    </div>
-                    <div className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-3xl font-bold text-blue-700">{publicationPrediction || 0}</p>
-                          <p className="text-sm text-blue-600">ожидаемых публикаций</p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            основано на динамике за последние годы
-                          </p>
-                        </div>
-                        <svg className="w-12 h-12 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Trend Card */}
-                  <div className="bg-white border border-green-100 rounded-lg shadow-sm overflow-hidden">
-                    <div className="bg-green-50 px-4 py-2 border-b border-green-100">
-                      <h3 className="text-sm font-medium text-green-900">Динамика публикаций</h3>
-                    </div>
-                    <div className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            {getTrendIcon(publicationTrend?.trend)}
-                            <span className="font-semibold text-gray-900">
-                              {publicationTrend?.trend === 'growing' ? 'Рост' :
-                               publicationTrend?.trend === 'declining' ? 'Снижение' : 'Стабильно'}
-                            </span>
-                          </div>
-                          <p className="text-sm text-gray-600">
-                            {Math.abs(publicationTrend?.growth || 0).toFixed(1)} публикаций в год
-                          </p>
-                        </div>
-                        <svg className="w-12 h-12 text-green-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {paginatedPublications.length > 0 ? (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {paginatedPublications.map((publication, index) => (

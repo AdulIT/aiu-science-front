@@ -15,7 +15,7 @@ import CrossrefImport from '../../components/PublicationImport/CrossrefImport'
 
 export const publicationTypeMap = {
   scopus_wos: 'Научные труды (Scopus/Web of Science)',
-  koknvo: 'КОКНВО',
+  koknvo: 'КОКСНВО',
   conference: 'Материалы конференций',
   articles: 'Статьи РК и не включенные в Scopus/WoS',
   books: 'Монографии, книги и учебные материалы',
@@ -167,6 +167,9 @@ export default function PublicationsPage() {
     setCurrentPage(page);
   };
 
+  // Функция сброса страницы на первую
+  const resetPage = () => setCurrentPage(1);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -268,7 +271,7 @@ export default function PublicationsPage() {
                   </div>
                   
                   <div className="flex items-center justify-between bg-gray-50 p-2 mt-auto border-t border-gray-300">
-                    <EDIT pub={publication} updateData={fetchPublications}/>
+                    <EDIT pub={publication} updateData={fetchPublications} resetPage={resetPage}/>
                     <button
                       onClick={() => handleDeletePublication(publication._id)}
                       className="py-1 px-2 text-xs text-white bg-rose-500 rounded-lg hover:bg-rose-600"

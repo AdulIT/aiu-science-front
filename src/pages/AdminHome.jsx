@@ -7,7 +7,7 @@ import BarChart from '../components/PublicationStats/BarChart'
 
 const publicationTypeMap = {
   scopus_wos: 'Научные труды (Scopus/Web of Science)',
-  koknvo: 'КОКНВО',
+  koknvo: 'КОКСНВО',
   conference: 'Материалы конференций',
   articles: 'Статьи РК и не включенные в Scopus/WoS',
   books: 'Монографии, книги и учебные материалы',

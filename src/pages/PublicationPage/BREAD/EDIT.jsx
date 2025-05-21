@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { makeAuthenticatedRequest } from "../../../services/api";
 const url = import.meta.env.VITE_API_URL;
 
-export default function EDIT({ pub, updateData }) {
+export default function EDIT({ pub, updateData, resetPage }) {
   const [isOpen, setIsOpen] = useState(false);
   const [file, setFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -38,62 +38,104 @@ export default function EDIT({ pub, updateData }) {
     if (!token) {
       setErrorMessage("Ошибка авторизации. Пожалуйста, войдите снова.");
       setUploading(false);
-      navigate("/login"); // Перенаправляем на страницу входа
+      navigate("/login");
       return;
     }
 
-    const formData = new FormData();
-
-    data.authors = data.authors
-      .split(",")
-      .map((author) => author.trim())
-      .join(", ");
-    if (file) {
-      formData.append("file", file);
-    }
-
-    Object.keys(data).forEach((key) => {
-      if (key === "authors") {
-        console.log(data.authors.split(","));
-        formData.append(key, data.authors.split(","));
-      } else {
-        formData.append(key, data[key]);
-      }
-    });
-
-    formData.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
-    });
-
     try {
+      // Создаем объект данных
+      const formData = new FormData();
+
+      // Правильно обрабатываем авторов
+      const authors = data.authors
+        .split(",")
+        .map((author) => author.trim())
+        .filter(Boolean)
+        .join(", ");
+
+      // Добавляем основные поля
+      formData.append("authors", String(authors));
+      formData.append("title", String(data.title));
+      formData.append("year", String(data.year));
+      formData.append("output", String(data.output));
+      formData.append("iin", String(pub.iin));
+      
+      // Добавляем тип публикации и статус
+      formData.append("publicationType", pub.publicationType || "articles");
+      formData.append("status", "active");
+
+      // Добавляем DOI если это Scopus/WoS публикация
+      if (pub?.publicationType === "scopus_wos") {
+        formData.append("doi", data.doi || "");
+        formData.append("scopus", data.scopus ? "true" : "false");
+        formData.append("wos", data.wos ? "true" : "false");
+      }
+
+      // Добавляем DOI для KOKNVO
+      if (pub?.publicationType === "koknvo" && data.doi) {
+        formData.append("doi", data.doi);
+      }
+
+      // Добавляем ISBN для книг
+      if (pub?.publicationType === "books" && data.isbn) {
+        formData.append("isbn", data.isbn);
+      }
+
+      // Добавляем DOI патента
+      if (pub?.publicationType === "patents" && data.patentDoi) {
+        formData.append("patentDoi", data.patentDoi);
+      }
+
+      // Добавляем файл если он был выбран
+      if (file) {
+        formData.append("file", file);
+      }
+
+      // Логируем данные для отладки
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+
       const response = await makeAuthenticatedRequest(
-        `${url}/api/admin/publications/${pub._id}`,
+        `${url}/api/user/upload/${pub._id}`,
         {
           method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          },
           data: formData,
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
         },
         navigate
       );
 
-      if (response.status === 200) {
-        if (updateData) {
-          updateData();
-        }
+      console.log('Ответ сервера:', response);
 
+      if (response.status === 200) {
+        // Закрываем диалог
         onClose();
+        
+        // Принудительно обновляем список публикаций
+        if (typeof updateData === 'function') {
+          try {
+            await updateData();
+            if (typeof resetPage === 'function') {
+              resetPage();
+            }
+            alert('Публикация успешно обновлена!');
+            console.log('Список публикаций обновлен');
+          } catch (updateError) {
+            console.error('Ошибка при обновлении списка:', updateError);
+          }
+        }
       } else {
-        // console.error('Ошибка при добавлении публикации')
-        // const errorData = await response.json();
-        // setErrorMessage(`Ошибка: ${errorData.message}`);
+        throw new Error('Не удалось обновить публикацию');
       }
     } catch (error) {
-      console.log(error);
+      console.error('Error updating publication:', error);
+      console.error('Error response:', error.response?.data);
       setErrorMessage(
-        "Произошла ошибка при добавлении публикации. Попробуйте снова."
+        error.response?.data?.message || 
+        "Произошла ошибка при обновлении публикации. Попробуйте снова."
       );
     }
     setUploading(false);

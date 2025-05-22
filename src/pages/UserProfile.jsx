@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { makeAuthenticatedRequest } from '../services/api'
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination/Pagination'
+import { generateUserReport } from '../services/reportUtils'
 
 const publicationTypeMap = {
   scopus_wos: 'Научные труды (Scopus/Web of Science)',
@@ -132,8 +133,17 @@ export default function UserProfile() {
         <div className="max-w-7xl mx-auto">
           {/* User Profile Card */}
           <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4 flex items-center justify-between">
               <h1 className="text-2xl font-bold text-white">Профиль пользователя</h1>
+              <button
+                onClick={() => generateUserReport(url, navigate, iin)}
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Генерировать отчет
+              </button>
             </div>
             <div className="p-6">
               <div className="flex flex-col md:flex-row gap-8">
@@ -175,6 +185,50 @@ export default function UserProfile() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Publication Stats and Predictions */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            {/* Publication Prediction Card */}
+            <div className="bg-gradient-to-br from-blue-50 to-white rounded-lg shadow-md p-6 border border-blue-100">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <h2 className="text-xl font-bold text-gray-800">Прогноз на следующий год</h2>
+              </div>
+              {user?.publicationPrediction ? (
+                <div className="space-y-2">
+                  <p className="text-3xl font-bold text-blue-600">{user.publicationPrediction.count}</p>
+                  <p className="text-sm text-gray-600">ожидаемых публикаций</p>
+                  <p className="text-xs text-gray-500">{user.publicationPrediction.basedOn}</p>
+                </div>
+              ) : (
+                <p className="text-gray-600">Данные прогноза отсутствуют.</p>
+              )}
+            </div>
+
+            {/* Publication Trend Card */}
+            <div className="bg-gradient-to-br from-green-50 to-white rounded-lg shadow-md p-6 border border-green-100">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  {getTrendIcon(user?.publicationTrend?.status)}
+                </div>
+                <h2 className="text-xl font-bold text-gray-800">Динамика публикаций</h2>
+              </div>
+              {user?.publicationTrend ? (
+                <div className="space-y-2">
+                  <p className={`text-xl font-bold ${user.publicationTrend.status === 'growing' ? 'text-green-600' : user.publicationTrend.status === 'declining' ? 'text-red-600' : 'text-gray-600'}`}>
+                    {user.publicationTrend.status === 'growing' ? 'Рост' : user.publicationTrend.status === 'declining' ? 'Снижение' : 'Стабильно'}
+                  </p>
+                  <p className="text-md text-gray-600">{user.publicationTrend.rate}</p>
+                </div>
+              ) : (
+                <p className="text-gray-600">Данные по динамике отсутствуют.</p>
+              )}
             </div>
           </div>
 

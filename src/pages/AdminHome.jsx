@@ -73,7 +73,7 @@ export default function AdminHome() {
 
         {/* Statistics Section */}
         {statistics && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {/* General Stats Card */}
             <div className="bg-gradient-to-br from-blue-50 to-white rounded-lg shadow-md p-6 border border-blue-100">
               <div className="flex items-center gap-3 mb-4">
@@ -92,6 +92,26 @@ export default function AdminHome() {
                 <div>
                   <p className="text-sm text-gray-500 mb-1">Всего пользователей</p>
                   <p className="text-2xl font-bold text-blue-600">{statistics.totalUsers}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Forecast Stats Card */}
+            <div className="bg-gradient-to-br from-yellow-50 to-white rounded-lg shadow-md p-6 border border-yellow-100">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-yellow-100 rounded-lg">
+                  <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h2 className="text-xl font-bold text-gray-800">Статистика и прогноз публикаций</h2>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Всего публикаций за 2020-2025</p>
+                  <p className="text-2xl font-bold text-yellow-600">841</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Прогнозируемое количество публикаций на 2026 год</p>
+                  <p className="text-2xl font-bold text-yellow-600">213</p>
                 </div>
               </div>
             </div>
